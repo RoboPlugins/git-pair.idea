@@ -5,14 +5,14 @@ package gitpairpicker.git;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;
-import com.intellij.execution.process.OSProcessHandler;
+import com.intellij.execution.process.CapturingProcessHandler;
+import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.EnvironmentUtil;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
-import java.io.InputStream;
 import java.util.Map;
 
 /**
@@ -109,22 +109,27 @@ public class GitRunner {
         gitConfigCommand.addParameters(parameters);
 
         // execute command
-        OSProcessHandler processHandler;
+        CapturingProcessHandler processHandler;
         try {
-            processHandler = new OSProcessHandler(gitConfigCommand);
+            processHandler = new CapturingProcessHandler(gitConfigCommand);
         } catch (ExecutionException e) {
-            System.out.println(TAG + " Error running git: " + e.getMessage());
+            System.out.println(TAG + " OS error: " + e.getMessage());
             return null;
         }
 
-        Process process = processHandler.getProcess();
-        InputStream inputStream = process.getInputStream();
-        try (java.util.Scanner scanner = new java.util.Scanner(inputStream)) {
-            String output = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
-            return output.trim();
-        } catch (Exception e) {
-            System.out.println(TAG + " Error processing git output: " + e.getMessage());
+        ProcessOutput processOutput = processHandler.runProcess(1000);
+        if (processOutput.isTimeout()) {
+            System.out.println(TAG + " " + gitConfigCommand.toString() + " Timed out after 1 second.");
             return null;
         }
+
+        String output = processOutput.getStdout();
+
+        if (processOutput.getExitCode() != 0) {
+            System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + output);
+            return null;
+        }
+
+        return output;
     }
 }
