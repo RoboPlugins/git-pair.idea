@@ -38,7 +38,7 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGeneratePairName() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
 
         // AND some members
         TeamMember grumpyCat = new TeamMember("gc", "Grumpy Cat", "grumpy.cat");
@@ -59,7 +59,7 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGeneratePairNameSolo() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
 
         // AND only one member
         TeamMember robert = new TeamMember("rw", "Robert A. Wallis", "robert.wallis");
@@ -73,7 +73,7 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGeneratePairNameTrio() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
 
         // AND three members
         TeamMember grumpyCat = new TeamMember("gc", "Grumpy Cat", "grumpy.cat");
@@ -90,7 +90,7 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGeneratePairEmail() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
 
         // AND some members
         TeamMember grumpyCat = new TeamMember("gc", "Grumpy Cat", "grumpy.cat");
@@ -111,7 +111,7 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGeneratePairEmailSolo() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
 
         // AND some members
         TeamMember robert = new TeamMember("rw", "Robert A. Wallis", "robert.wallis");
@@ -123,9 +123,23 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("prefix+robert.wallis@smilingrob.com", pairName);
     }
 
+    public void testGeneratePairEmailNoPrefix() throws Exception {
+        // GIVEN a configuration
+        PairConfig pairConfig = new PairConfig(null, "smilingrob.com");
+
+        // AND some members
+        TeamMember robert = new TeamMember("rw", "Robert A. Wallis", "robert.wallis");
+
+        // WHEN a pair email is generated
+        String pairName = pairConfig.generatePairEmail(robert);
+
+        // THEN it should be formatted correctly
+        assertEquals("robert.wallis@smilingrob.com", pairName);
+    }
+
     public void testGeneratePairEmailTrio() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
 
         // AND some members
         TeamMember grumpyCat = new TeamMember("gc", "Grumpy Cat", "grumpy.cat");
