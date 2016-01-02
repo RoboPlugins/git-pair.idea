@@ -103,10 +103,10 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("prefix+grumpy.cat+robert.wallis@smilingrob.com", pairName);
 
         // WHEN a pair name is generated in reverse order
-        String pairNameReversed = pairConfig.generatePairName(robert, grumpyCat);
+        String pairNameReversed = pairConfig.generatePairEmail(robert, grumpyCat);
 
         // THEN it should STILL be formatted alphabetically
-        assertEquals("prefix+grumpy.cat+robert.wallis@smilingrob.com", pairName);
+        assertEquals("prefix+grumpy.cat+robert.wallis@smilingrob.com", pairNameReversed);
     }
 
     public void testGeneratePairEmailSolo() throws Exception {
