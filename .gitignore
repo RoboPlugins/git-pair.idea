@@ -5,6 +5,7 @@
 *.jar
 *.war
 *.ear
+/out/
 
 # IDE
 .idea
