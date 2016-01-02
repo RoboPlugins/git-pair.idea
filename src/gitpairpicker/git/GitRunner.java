@@ -20,6 +20,7 @@ import java.util.Map;
  */
 public class GitRunner {
 
+    private static final String TAG = GitRunner.class.getSimpleName();
     private String projectBasePath;
     private String gitPathCache;
 
@@ -30,6 +31,16 @@ public class GitRunner {
      */
     public GitRunner(String projectBasePath) {
         this.projectBasePath = projectBasePath;
+    }
+
+    /**
+     * Run `git config user.email` and return the current configured user.
+     *
+     * @return returns the current configured user email or null on error.
+     */
+    @Nullable
+    public String runGitConfigUserEmail() {
+        return runGitCommand("config", "user.email");
     }
 
     /**
@@ -74,16 +85,6 @@ public class GitRunner {
     }
 
     /**
-     * Run `git config user.email` and return the current configured user.
-     *
-     * @return returns the current configured user email or null on error.
-     */
-    @Nullable
-    public String runGitConfigUserEmail() {
-        return runGitCommand("config", "user.email");
-    }
-
-    /**
      * Run a git command.  Finds git, and then runs the parameters.
      * For example, parameters "config", "user.email" will run `git config user.email`.
      *
@@ -91,7 +92,7 @@ public class GitRunner {
      * @return output of the git command.
      */
     @Nullable
-    public String runGitCommand(String... parameters) {
+    private String runGitCommand(String... parameters) {
         String gitPath = findGitExePath();
         if (!StringUtil.isNotEmpty(gitPath)) {
             // git will fail, because we can't find it, so we exit early
@@ -112,7 +113,7 @@ public class GitRunner {
         try {
             processHandler = new OSProcessHandler(gitConfigCommand);
         } catch (ExecutionException e) {
-            System.out.println("Couldn't find current git user: " + e.getMessage());
+            System.out.println(TAG + " Error running git: " + e.getMessage());
             return null;
         }
 
@@ -122,7 +123,7 @@ public class GitRunner {
             String output = scanner.useDelimiter("\\A").hasNext() ? scanner.next() : "";
             return output.trim();
         } catch (Exception e) {
-            System.out.println("Error processing git output: " + e.getMessage());
+            System.out.println(TAG + " Error processing git output: " + e.getMessage());
             return null;
         }
     }
