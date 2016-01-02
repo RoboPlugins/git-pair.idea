@@ -1,3 +1,6 @@
+/**
+ * Copyright (C) 2016 Robert A. Wallis.  All Rights Reserved.
+ */
 package gitpairpicker.ui;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -11,6 +14,7 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.impl.status.EditorBasedWidget;
 import com.intellij.util.Consumer;
 import com.intellij.util.ObjectUtils;
+import gitpairpicker.git.GitRunner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -31,7 +35,22 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
      */
     public GitPairWidget(@NotNull Project project) {
         super(project);
-        mSelectedPair = "Your Mom";
+    }
+
+    /**
+     * Ask git who is the current user, and update our internal state.
+     */
+    public boolean updateCurrentEmail() {
+        boolean operationSuccessful = false;
+
+        GitRunner gitRunner = new GitRunner(myProject.getBasePath());
+        String currentEmail = gitRunner.runGitConfigUserEmail();
+
+        if (StringUtil.isNotEmpty(currentEmail)) {
+            mSelectedPair = currentEmail;
+            operationSuccessful = true;
+        }
+        return operationSuccessful;
     }
 
     @Override
@@ -39,47 +58,46 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         return new GitPairWidget(ObjectUtils.assertNotNull(getProject()));
     }
 
-    @Nullable
     @Override
+    @Nullable
     public ListPopup getPopupStep() {
-        // GitBranchPopup.getInstance(project, repository).asListPopup()
-        return null;
+        return PairsPopupList.createPairsPopup(myProject);
     }
 
-    @Nullable
     @Override
+    @Nullable
     public String getSelectedValue() {
         if (StringUtil.isEmpty(mSelectedPair))
             return "";
         return mSelectedPair;
     }
 
-    @NotNull
     @Override
+    @NotNull
     public String getMaxValue() {
         return "";
     }
 
-    @NotNull
     @Override
+    @NotNull
     public String ID() {
         return this.getClass().getName();
     }
 
-    @Nullable
     @Override
+    @Nullable
     public WidgetPresentation getPresentation(@NotNull PlatformType platformType) {
         return this;
     }
 
-    @Nullable
     @Override
+    @Nullable
     public String getTooltipText() {
         return mSelectedPair;
     }
 
-    @Nullable
     @Override
+    @Nullable
     public Consumer<MouseEvent> getClickConsumer() {
         // has no effect since the click opens a list popup, and the consumer is not called for the MultipleTextValuesPresentation
         return null;
@@ -87,6 +105,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
 
     /**
      * Insert this widget into the status bar in the correct position.
+     *
      * @param project IntelliJ Project.
      */
     public void installWidgetToStatusBar(@NotNull final Project project) {

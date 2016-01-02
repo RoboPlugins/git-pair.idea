@@ -31,7 +31,7 @@
 
     <project-components>
         <component>
-            <implementation-class>GitPairProjectComponent</implementation-class>
+            <implementation-class>gitpairpicker.GitPairProjectComponent</implementation-class>
         </component>
     </project-components>
 </idea-plugin>
