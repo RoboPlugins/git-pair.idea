@@ -1,11 +1,11 @@
 package gitpairpicker.git;
 
-import com.intellij.testFramework.LightPlatformTestCase;
+import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
 
 /**
  * Make sure the git commands work.
  */
-public class GitRunnerTest extends LightPlatformTestCase {
+public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testRunGitConfigUserEmail() throws Exception {
         // GIVEN a system with git installed and a project configured with git
