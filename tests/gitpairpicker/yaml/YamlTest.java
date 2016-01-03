@@ -1,4 +1,6 @@
-// Copyright (C) 2016 Robert A. Wallis, ALl Rights Reserved.
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ */
 package gitpairpicker.yaml;
 
 import junit.framework.TestCase;
@@ -8,7 +10,7 @@ import junit.framework.TestCase;
  */
 public class YamlTest extends TestCase {
 
-    static final String YAML_FILE = "# This is a comment.\n" +
+    static final String YAML_SOURCE = "# This is a comment.\n" +
             "\n" +
             "pairs:\n" +
             "  gc: Grumpy Cat;grumpy.cat\n" +
@@ -33,7 +35,7 @@ public class YamlTest extends TestCase {
 
         // GIVEN a test YAML file
         // WHEN we parse it
-        Node root = Yaml.parse(YAML_FILE);
+        Node root = Yaml.parse(YAML_SOURCE);
 
         // THEN it should contain all the root sections
         assertNotNull(root);
@@ -47,7 +49,7 @@ public class YamlTest extends TestCase {
 
         // GIVEN a test YAML file
         // WHEN we parse it
-        Node root = Yaml.parse(YAML_FILE);
+        Node root = Yaml.parse(YAML_SOURCE);
 
         // THEN it should contain pairs
         Node pairs = root.get("pairs");
@@ -63,7 +65,7 @@ public class YamlTest extends TestCase {
 
         // GIVEN a test YAML file
         // WHEN we parse it
-        Node root = Yaml.parse(YAML_FILE);
+        Node root = Yaml.parse(YAML_SOURCE);
 
         // THEN it should contain pairs
         Node pairs = root.get("pairs");
@@ -79,7 +81,7 @@ public class YamlTest extends TestCase {
 
         // GIVEN a test YAML file
         // WHEN we parse it
-        Node root = Yaml.parse(YAML_FILE);
+        Node root = Yaml.parse(YAML_SOURCE);
         Node d0 = root.get("d0");
         assertNotNull(d0);
 
@@ -93,7 +95,7 @@ public class YamlTest extends TestCase {
 
         // GIVEN a test YAML file
         // WHEN we parse it
-        Node root = Yaml.parse(YAML_FILE);
+        Node root = Yaml.parse(YAML_SOURCE);
         Node d1 = root.get("d0").get("d1");
 
         // THEN pairs:rw:third: should have an overwritten value
@@ -109,7 +111,7 @@ public class YamlTest extends TestCase {
 
         // GIVEN a test YAML file
         // WHEN we parse it
-        Node root = Yaml.parse(YAML_FILE);
+        Node root = Yaml.parse(YAML_SOURCE);
 
         // THEN values added before and after adding nodes should work
         assertNotNull(root.get("d0").get("d1").get("d2"));
