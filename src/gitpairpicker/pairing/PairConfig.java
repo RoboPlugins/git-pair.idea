@@ -200,10 +200,10 @@ public class PairConfig {
     private static class AlphebeticalName implements Comparator<TeamMember> {
         @Override
         public int compare(TeamMember o1, TeamMember o2) {
-            if (o1 == null) {
+            if (o1 == null || o1.getName() == null) {
                 return 1; // null at end
             }
-            if (o2 == null) {
+            if (o2 == null || o2.getName() == null) {
                 return -1; // null at end
             }
             return o1.getName().compareTo(o2.getName());

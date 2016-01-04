@@ -106,6 +106,19 @@ public class PairConfigTest extends TestCase {
         assertEquals("Grumpy Cat, Pinkie Pie, and Robert A. Wallis", pairName);
     }
 
+    public void testGeneratePairNameBadData() throws Exception {
+        // GIVEN a configuration
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
+
+        // AND three members
+        TeamMember grumpyCat = new TeamMember(null, "Grumpy Cat", "grumpy.cat");
+        TeamMember pinkiePie = new TeamMember("pp", null, "pinkie.pie");
+        TeamMember robert = new TeamMember("rw", "Robert A. Wallis", null);
+
+        // WHEN a pair name is generated
+        // THEN it should't crash
+        pairConfig.generatePairName(grumpyCat, pinkiePie, robert);
+    }
 
     public void testGeneratePairEmail() throws Exception {
         // GIVEN a configuration
@@ -170,6 +183,20 @@ public class PairConfigTest extends TestCase {
 
         // THEN it should be formatted correctly
         assertEquals("prefix+grumpy.cat+pinkie.pie+robert.wallis@smilingrob.com", pairName);
+    }
+
+    public void testGeneratePairEmailBadData() throws Exception {
+        // GIVEN a configuration
+        PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
+
+        // AND some members
+        TeamMember grumpyCat = new TeamMember("gc", null, "grumpy.cat");
+        TeamMember pinkiePie = new TeamMember("pp", "Pinkie Pie", null);
+        TeamMember robert = new TeamMember(null, "Robert A. Wallis", "robert.wallis");
+
+        // WHEN a pair email is generated
+        // THEN it should'nt crash
+        pairConfig.generatePairEmail(robert, grumpyCat, pinkiePie);
     }
 
     public void testTeamMemberFromYamlPairChildNode() throws Exception {
