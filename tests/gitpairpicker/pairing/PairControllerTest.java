@@ -4,6 +4,7 @@
 
 package gitpairpicker.pairing;
 
+import gitpairpicker.git.GitRunner;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
@@ -15,10 +16,11 @@ import java.util.List;
 public class PairControllerTest extends TestCase {
 
     PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
+    GitRunner gitRunner = new GitRunner(".");
 
     public void testGeneratePairName() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
         TeamMember grumpyCat = new TeamMember("gc", "Grumpy Cat", "grumpy.cat");
@@ -47,7 +49,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairNameSolo() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND only one member
         TeamMember robert = new TeamMember("rw", "Robert A. Wallis", "robert.wallis");
@@ -63,7 +65,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairNameTrio() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND three members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -80,7 +82,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairNameBadData() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND broken members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -96,7 +98,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairEmail() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -123,7 +125,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairEmailSolo() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -139,7 +141,7 @@ public class PairControllerTest extends TestCase {
     public void testGeneratePairEmailNoPrefix() throws Exception {
         // GIVEN a configuration
         PairConfig noPrefixConfig = new PairConfig(null, "smilingrob.com");
-        PairController pairController = new PairController(noPrefixConfig, "");
+        PairController pairController = new PairController(noPrefixConfig, gitRunner);
 
         // AND some members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -154,7 +156,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairEmailTrio() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -171,7 +173,7 @@ public class PairControllerTest extends TestCase {
 
     public void testGeneratePairEmailBadData() throws Exception {
         // GIVEN a configuration
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
         ArrayList<TeamMember> list = new ArrayList<>();
@@ -187,13 +189,14 @@ public class PairControllerTest extends TestCase {
 
     public void testPairMatcher() throws Exception {
         // GIVEN a valid configuration and a configured email
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
         String email = "prefix+grumpy.cat+robert.wallis@smilingrob.com";
 
         // WHEN we get the members that match the email
         List<TeamMember> team = pairController.matchTeamMembersFromEmail(email);
 
         // THEN the list should match the members
+        assertNotNull(team);
         assertEquals(2, team.size());
         assertEquals("Grumpy Cat", team.get(0).getName());
         assertEquals("Robert A. Wallis", team.get(1).getName());
@@ -201,7 +204,7 @@ public class PairControllerTest extends TestCase {
 
     public void testPairMatcherBadData() throws Exception {
         // GIVEN a valid configuration and a configured email
-        PairController pairController = new PairController(pairConfig, "");
+        PairController pairController = new PairController(pairConfig, gitRunner);
 
         // WHEN the email has no matching names
         // THEN it shouldn't crash
@@ -214,11 +217,13 @@ public class PairControllerTest extends TestCase {
         // WHEN the email is not really an email
         // THEN it should still match
         List<TeamMember> team = pairController.matchTeamMembersFromEmail("grumpy.cat");
+        assertNotNull(team);
         assertEquals("Grumpy Cat", team.get(0).getName());
 
         // WHEN the email is a bit malformed
         // THEN it should still match
         List<TeamMember> team1 = pairController.matchTeamMembersFromEmail("+grumpy.cat+");
+        assertNotNull(team1);
         assertEquals("Grumpy Cat", team1.get(0).getName());
     }
 }

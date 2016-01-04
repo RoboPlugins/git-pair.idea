@@ -7,6 +7,7 @@ package gitpairpicker.pairing;
 import com.intellij.openapi.util.text.StringUtil;
 import gitpairpicker.git.GitRunner;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -19,27 +20,89 @@ import java.util.List;
 public class PairController {
 
     PairConfig pairConfig;
-    String projectBasePath;
-    ArrayList<TeamMember> currentPair = new ArrayList<>();
+    GitRunner gitRunner;
+    ArrayList<TeamMember> currentPair;
 
     /**
      * Logic for pairing.
      *
-     * @param projectBasePath location of the .git folder.
-     * @param pairConfig      configuration from .pairs.
+     * @param gitRunner  git command runner.
+     * @param pairConfig configuration from .pairs.
      */
-    public PairController(@NotNull PairConfig pairConfig, @NotNull String projectBasePath) {
+    public PairController(@NotNull PairConfig pairConfig, @NotNull GitRunner gitRunner) {
         this.pairConfig = pairConfig;
-        this.projectBasePath = projectBasePath;
+        this.gitRunner = gitRunner;
+        this.currentPair = new ArrayList<>();
     }
+
+    /**
+     * Initialize controller, looks in git for who is paired.
+     */
+    public void init() {
+        List<TeamMember> pairs = findWhoIsPaired();
+        if (pairs != null) {
+            currentPair = new ArrayList<>(pairs);
+        }
+    }
+
+    /**
+     * Add or remove a team member.
+     *
+     * @param teamMember team member to turn on or off.
+     */
+    public void toggleTeamMember(TeamMember teamMember) {
+        if (teamMember == null || StringUtil.isEmpty(teamMember.getEmail())) {
+            return;
+        }
+
+        if (currentPair.contains(teamMember)) {
+            currentPair.remove(teamMember);
+        } else {
+            currentPair.add(teamMember);
+        }
+
+        String email = generatePairEmail(currentPair);
+        String name = generatePairName(currentPair);
+
+        if (name != null) {
+            gitRunner.setUserName(name);
+        }
+        if (email != null) {
+            gitRunner.setUserEmail(email);
+        }
+    }
+
+    /**
+     * Generate and return the display name for the pair.
+     *
+     * @return formatted display name for the pair.
+     */
+    @Nullable
+    public String getPairDisplayName() {
+        return generatePairName(currentPair);
+    }
+
+    /**
+     * Figure out who is paired and return the list.
+     *
+     * @return list of currently paired members.
+     */
+    @Nullable
+    List<TeamMember> findWhoIsPaired() {
+        // ask git who is paired, instead of relying on an internal state
+        String userEmail = gitRunner.getUserEmail();
+        return matchTeamMembersFromEmail(userEmail);
+    }
+
 
     /**
      * Given an email address, which team members match that email address.
      * Looks in the PairConfig for matching emails.
      *
      * @param email address to parse.
-     * @return list of matching members, or null if there were errors
+     * @return list of matching members, or null if there were errors.
      */
+    @Nullable
     List<TeamMember> matchTeamMembersFromEmail(String email) {
         if (StringUtil.isEmpty(email)) {
             return null;
@@ -63,50 +126,12 @@ public class PairController {
     }
 
     /**
-     * Add or remove a team member.
-     *
-     * @param teamMember team member to turn on or off.
-     */
-    public void toggleTeamMember(TeamMember teamMember) {
-        if (currentPair.contains(teamMember)) {
-            currentPair.remove(teamMember);
-        } else {
-            currentPair.add(teamMember);
-        }
-
-        String email = generatePairEmail(currentPair);
-        String name = generatePairName(currentPair);
-
-        if (StringUtil.isEmpty(email) || StringUtil.isEmpty(name)) {
-            return;
-        }
-
-        GitRunner gitRunner = new GitRunner(projectBasePath);
-        gitRunner.setUserName(name);
-        gitRunner.setUserEmail(email);
-    }
-
-    public String getPairDisplayName() {
-        return generatePairName(currentPair);
-    }
-
-    /**
-     * Figure out who is paired and return the list.
-     * Also updates internal currentPair.
-     *
-     * @return List of currently paired team members.
-     */
-    List<TeamMember> findWhoIsPaired() {
-        // TODO: actually check email
-        return currentPair;
-    }
-
-    /**
      * Calculate what the git user.email should be given some team members.
      *
      * @param teamMembers list of team emmbers.
      * @return emailable email for the team.
      */
+    @Nullable
     String generatePairEmail(List<TeamMember> teamMembers) {
 
         if (teamMembers.size() == 0) {
@@ -150,6 +175,7 @@ public class PairController {
      * @param teamMembers list of team members.
      * @return human readable list of names.
      */
+    @Nullable
     String generatePairName(List<TeamMember> teamMembers) {
 
         if (teamMembers.size() == 0) {
