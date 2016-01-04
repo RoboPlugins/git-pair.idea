@@ -1,20 +1,39 @@
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ */
 package gitpairpicker.pairing;
 
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import gitpairpicker.yaml.Node;
+import gitpairpicker.yaml.Yaml;
+import junit.framework.TestCase;
 
 import java.util.List;
 
 /**
  * Handles loading the configuration.
  */
-public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
+public class PairConfigTest extends TestCase {
+
+    static final String YAML_SOURCE = "# This is a comment.\n" +
+            "\n" +
+            "pairs:\n" +
+            "  gc: Grumpy Cat;grumpy.cat\n" +
+            "  pp: Pinkie Pie; pinkie.pie\n" +
+            "  rw: Robert A. Wallis; robert.wallis\n" +
+            "\n" +
+            "email:\n" +
+            "  prefix:\n" +
+            "  domain: smilingrob.com\n" +
+            "\n" +
+            "global: true\n";
 
     public void testFindAllTeamMembers() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig(getTestDataPath());
+        PairConfig pairConfig = new PairConfig();
+        pairConfig.configureWithYamlSource(YAML_SOURCE);
 
         // WHEN I load all the team members.
-        List<TeamMember> teamMembers = pairConfig.findAllTeamMembers();
+        List<TeamMember> teamMembers = pairConfig.getTeamMembers();
 
         // THEN it should contain some data
         assertNotNull(teamMembers);
@@ -151,6 +170,40 @@ public class PairConfigTest extends LightPlatformCodeInsightFixtureTestCase {
 
         // THEN it should be formatted correctly
         assertEquals("prefix+grumpy.cat+pinkie.pie+robert.wallis@smilingrob.com", pairName);
+    }
+
+    public void testTeamMemberFromYamlPairChildNode() throws Exception {
+        // GIVEN a team node
+        Node config = Yaml.parse(YAML_SOURCE);
+        Node teamMemberNode = config.get("pairs").get("rw");
+
+        // WHEN the team member is parsed
+        TeamMember teamMember = PairConfig.teamMemberFromYamlPairChildNode(teamMemberNode);
+
+        // THEN it should contain the correct fields
+        assertEquals("rw", teamMember.getInitials());
+        assertEquals("Robert A. Wallis", teamMember.getName());
+        assertEquals("robert.wallis", teamMember.getEmail());
+
+        // WHEN a bad node is parsed
+        // THEN it should not crash
+        assertNull(PairConfig.teamMemberFromYamlPairChildNode(null));
+
+        Node bad1 = new Node(null);
+        assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
+
+        bad1.setKey("initials");
+        assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
+
+        // WHEN it's missing a name
+        // THEN don't crash
+        bad1.setValue(";email");
+        assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
+
+        // WHEN it's missing an email
+        // THEN don't crash
+        bad1.setValue("name;");
+        assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
     }
 
 }

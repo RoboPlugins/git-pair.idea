@@ -1,6 +1,11 @@
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ */
 package gitpairpicker.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
+import gitpairpicker.yaml.Node;
+import gitpairpicker.yaml.Yaml;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -14,16 +19,14 @@ import java.util.List;
  */
 public class PairConfig {
 
-    private String prefix = "";
-    private String domain = "";
+    private String prefix;
+    private String domain;
+    private List<TeamMember> teamMembers = new ArrayList<>();
 
     /**
      * Initialize the pair configuration.
-     *
-     * @param projectRootDir the project folder where the .pairs file is located.
      */
-    public PairConfig(String projectRootDir) {
-
+    public PairConfig() {
     }
 
     /**
@@ -39,9 +42,80 @@ public class PairConfig {
         this.domain = domain;
     }
 
-    public List<TeamMember> findAllTeamMembers() {
-        // TODO: WIP return all team members
-        return null;
+    /**
+     * Generate a new TeamMember for the Yaml node.
+     * Members should be formatted like "initials: Full Name; email.address" in the YAML file.
+     *
+     * @param memberNode node under "pairs".
+     * @return new TeamMember with values set, or null if it was not parsable as a complete team member.
+     */
+    static TeamMember teamMemberFromYamlPairChildNode(Node memberNode) {
+        if (memberNode == null) {
+            return null;
+        }
+
+        String initials = memberNode.getKey();
+        if (initials == null) {
+            return null;
+        }
+
+        String value = memberNode.getValue();
+        if (value == null) {
+            return null;
+        }
+
+        String[] values = value.split(";");
+        if (values.length < 2) {
+            return null;
+        }
+
+        String name = values[0].trim();
+        String email = values[1].trim();
+        if (StringUtil.isEmpty(name) || StringUtil.isEmpty(email)) {
+            return null;
+        }
+
+        return new TeamMember(initials, name, email);
+    }
+
+    /**
+     * Configure with a YAML source text.
+     *
+     * @param yamlSource contents of the .pairs file.
+     */
+    public void configureWithYamlSource(String yamlSource) {
+        Node root = Yaml.parse(yamlSource);
+        if (root != null) {
+            Node emailNode = root.get("email");
+            if (emailNode != null) {
+                Node prefixNode = emailNode.get("prefix");
+                if (prefixNode != null) {
+                    prefix = prefixNode.getValue();
+                }
+                Node domainNode = emailNode.get("domain");
+                if (domainNode != null) {
+                    domain = domainNode.getValue();
+                }
+            }
+            Node pairs = root.get("pairs");
+            if (pairs != null) {
+                for (Node pairNode : pairs.getChildren()) {
+                    TeamMember teamMember = teamMemberFromYamlPairChildNode(pairNode);
+                    if (teamMember != null) {
+                        teamMembers.add(teamMember);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Get all the team members from the configuration.
+     *
+     * @return list of team members that can check in.
+     */
+    public List<TeamMember> getTeamMembers() {
+        return teamMembers;
     }
 
     /**
