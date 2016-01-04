@@ -5,11 +5,13 @@
 package gitpairpicker.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
+import gitpairpicker.git.GitRunner;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.List;
 
 /**
  * Controls pair logic.
@@ -17,14 +19,46 @@ import java.util.Comparator;
 public class PairController {
 
     PairConfig pairConfig;
+    String projectBasePath;
+    ArrayList<TeamMember> currentPair = new ArrayList<>();
 
     /**
      * Logic for pairing.
      *
-     * @param pairConfig configuration from .pairs.
+     * @param projectBasePath location of the .git folder.
+     * @param pairConfig      configuration from .pairs.
      */
-    public PairController(@NotNull PairConfig pairConfig) {
+    public PairController(@NotNull PairConfig pairConfig, @NotNull String projectBasePath) {
         this.pairConfig = pairConfig;
+        this.projectBasePath = projectBasePath;
+    }
+
+    public void toggleTeamMember(TeamMember teamMember) {
+        if (currentPair.contains(teamMember)) {
+            currentPair.remove(teamMember);
+        } else {
+            currentPair.add(teamMember);
+        }
+
+        String email = generatePairEmail(currentPair);
+        String name = generatePairName(currentPair);
+
+        if (StringUtil.isEmpty(email) || StringUtil.isEmpty(name)) {
+            return;
+        }
+
+        GitRunner gitRunner = new GitRunner(projectBasePath);
+        gitRunner.setUserName(name);
+        gitRunner.setUserEmail(email);
+    }
+
+    public String getPairDisplayName() {
+        return generatePairName(currentPair);
+    }
+
+    List<TeamMember> findWhoIsPaired() {
+        // TODO: actually check email
+        return currentPair;
     }
 
     /**
@@ -33,9 +67,9 @@ public class PairController {
      * @param teamMembers list of team emmbers.
      * @return emailable email for the team.
      */
-    public String generatePairEmail(TeamMember... teamMembers) {
+    String generatePairEmail(List<TeamMember> teamMembers) {
 
-        if (teamMembers.length == 0) {
+        if (teamMembers.size() == 0) {
             return null;
         }
 
@@ -76,9 +110,9 @@ public class PairController {
      * @param teamMembers list of team members.
      * @return human readable list of names.
      */
-    public String generatePairName(TeamMember... teamMembers) {
+    String generatePairName(List<TeamMember> teamMembers) {
 
-        if (teamMembers.length == 0) {
+        if (teamMembers.size() == 0) {
             return null;
         }
 
