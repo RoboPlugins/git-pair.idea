@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2016 Robert A. Wallis.  All Rights Reserved.
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 package gitpairpicker;
 
@@ -42,7 +42,7 @@ public class GitPairProjectComponent implements ProjectComponent {
     public void projectOpened() {
         // called when project is opened
         GitPairWidget gitPairWidget = new GitPairWidget(mProject);
-        if (gitPairWidget.updateCurrentEmail()) {
+        if (gitPairWidget.updateState()) {
             gitPairWidget.installWidgetToStatusBar(mProject);
         }
     }

@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2016 Robert A. Wallis.  All Rights Reserved.
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 package gitpairpicker.ui;
 
@@ -10,6 +10,8 @@ import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.ui.popup.PopupFactoryImpl;
+import gitpairpicker.pairing.PairConfig;
+import gitpairpicker.pairing.TeamMember;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -33,23 +35,30 @@ public class PairsPopupList extends PopupFactoryImpl.ActionGroupPopup {
     /**
      * Construct a PairsPopupList.  Adds the rows for you.
      *
-     * @param project IntelliJ Project.
+     * @param project    IntelliJ Project.
+     * @param pairConfig Configuration structure that tells which members exist.
      * @return a new popup menu.
      */
-    public static PairsPopupList createPairsPopup(@NotNull Project project) {
+    public static PairsPopupList createPairsPopup(@NotNull Project project, @NotNull PairConfig pairConfig, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
         Condition<AnAction> preselectActionCondition = new GitPairPreselectCondition();
-        ActionGroup actionGroup = createActions();
+        ActionGroup actionGroup = createActions(pairConfig, teamMemberActionPerformer);
         return new PairsPopupList(project, preselectActionCondition, actionGroup);
     }
 
     /**
      * Create a list of IntelliJ actions that the user can choose, to change their pairs.
      *
+     * @param pairConfig Configuration structure that tells which members exist.
      * @return list of actions.
      */
-    private static ActionGroup createActions() {
-        // TODO: WIP: make an action for each team member
-        return new DefaultActionGroup(null, false);
+    private static ActionGroup createActions(@NotNull PairConfig pairConfig, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
+        DefaultActionGroup defaultActionGroup = new DefaultActionGroup(null, false);
+
+        for (TeamMember teamMember : pairConfig.getTeamMembers()) {
+            defaultActionGroup.add(new TeamMemberAction(teamMember, false, teamMemberActionPerformer));
+        }
+
+        return defaultActionGroup;
     }
 
     /**
