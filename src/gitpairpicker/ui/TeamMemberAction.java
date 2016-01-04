@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
+
 package gitpairpicker.ui;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -24,19 +25,16 @@ public class TeamMemberAction extends DumbAwareAction implements KeepingPopupOpe
     private final static Icon OFF = EmptyIcon.create(ON.getIconHeight());
 
     private TeamMember teamMember;
-    private boolean isPaired;
     private TeamMemberActionPerformer teamMemberActionPerformer;
 
     /**
      * Create a row for a team member.
      *
      * @param teamMember model representing a team member.
-     * @param isPaired   currently paired state.
      */
     public TeamMemberAction(@NotNull TeamMember teamMember, boolean isPaired, @NotNull TeamMemberActionPerformer actionPerformer) {
         super(teamMember.getName());
         this.teamMember = teamMember;
-        this.isPaired = isPaired;
         this.teamMemberActionPerformer = actionPerformer;
         getTemplatePresentation().setIcon(isPaired ? ON : OFF);
         getTemplatePresentation().setSelectedIcon(ON_SELECTED);
@@ -45,6 +43,10 @@ public class TeamMemberAction extends DumbAwareAction implements KeepingPopupOpe
     @Override
     public void actionPerformed(AnActionEvent anActionEvent) {
         teamMemberActionPerformer.onTeamMemberActionPerformed(teamMember);
+    }
+
+    public TeamMember getTeamMember() {
+        return teamMember;
     }
 
     /**

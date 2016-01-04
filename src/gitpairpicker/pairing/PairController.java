@@ -91,6 +91,7 @@ public class PairController {
         return currentPair.contains(teamMember);
     }
 
+    @NotNull
     public PairConfig getPairConfig() {
         return pairConfig;
     }

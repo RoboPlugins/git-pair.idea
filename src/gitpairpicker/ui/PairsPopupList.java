@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
+
 package gitpairpicker.ui;
 
 import com.intellij.openapi.actionSystem.ActionGroup;
@@ -11,6 +12,7 @@ import com.intellij.openapi.project.Project;
 import com.intellij.openapi.util.Condition;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import gitpairpicker.pairing.PairConfig;
+import gitpairpicker.pairing.PairController;
 import gitpairpicker.pairing.TeamMember;
 import org.jetbrains.annotations.NotNull;
 
@@ -35,27 +37,28 @@ public class PairsPopupList extends PopupFactoryImpl.ActionGroupPopup {
     /**
      * Construct a PairsPopupList.  Adds the rows for you.
      *
-     * @param project    IntelliJ Project.
-     * @param pairConfig Configuration structure that tells which members exist.
+     * @param project        IntelliJ Project.
+     * @param pairController Pair logic controller.
      * @return a new popup menu.
      */
-    public static PairsPopupList createPairsPopup(@NotNull Project project, @NotNull PairConfig pairConfig, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
-        Condition<AnAction> preselectActionCondition = new GitPairPreselectCondition();
-        ActionGroup actionGroup = createActions(pairConfig, teamMemberActionPerformer);
+    public static PairsPopupList createPairsPopup(@NotNull Project project, @NotNull PairController pairController, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
+        Condition<AnAction> preselectActionCondition = new GitPairPreselectCondition(pairController);
+        ActionGroup actionGroup = createActions(pairController, teamMemberActionPerformer);
         return new PairsPopupList(project, preselectActionCondition, actionGroup);
     }
 
     /**
      * Create a list of IntelliJ actions that the user can choose, to change their pairs.
      *
-     * @param pairConfig Configuration structure that tells which members exist.
+     * @param pairController Pair logic controller for list of members.
      * @return list of actions.
      */
-    private static ActionGroup createActions(@NotNull PairConfig pairConfig, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
+    private static ActionGroup createActions(@NotNull PairController pairController, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
         DefaultActionGroup defaultActionGroup = new DefaultActionGroup(null, false);
+        PairConfig pairConfig = pairController.getPairConfig();
 
         for (TeamMember teamMember : pairConfig.getTeamMembers()) {
-            defaultActionGroup.add(new TeamMemberAction(teamMember, false, teamMemberActionPerformer));
+            defaultActionGroup.add(new TeamMemberAction(teamMember, pairController.isPaired(teamMember), teamMemberActionPerformer));
         }
 
         return defaultActionGroup;
@@ -65,8 +68,22 @@ public class PairsPopupList extends PopupFactoryImpl.ActionGroupPopup {
      * Handles selecting users (Action rows) that are currently paired.
      */
     private static class GitPairPreselectCondition implements Condition<AnAction> {
+
+        private PairController pairController;
+
+        /**
+         * @param pairController pair controller to check if team member is currently paired, for selection.
+         */
+        public GitPairPreselectCondition(PairController pairController) {
+            this.pairController = pairController;
+        }
+
         @Override
         public boolean value(AnAction anAction) {
+            if (anAction instanceof TeamMemberAction) {
+                TeamMemberAction teamMemberAction = (TeamMemberAction) anAction;
+                return pairController.isPaired(teamMemberAction.getTeamMember());
+            }
             return false;
         }
     }

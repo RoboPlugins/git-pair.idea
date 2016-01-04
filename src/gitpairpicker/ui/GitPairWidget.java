@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
+
 package gitpairpicker.ui;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -34,7 +35,6 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     @Nullable
     private String selectedPair;
 
-    private PairConfig pairConfig;
     private PairController pairController;
 
     /**
@@ -69,7 +69,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
             return false;
         }
         GitRunner gitRunner = new GitRunner(projectPath);
-        pairConfig = new PairConfig(configYaml);
+        PairConfig pairConfig = new PairConfig(configYaml);
         pairController = new PairController(pairConfig, gitRunner);
         pairController.init();
         selectedPair = pairController.getPairDisplayName();
@@ -85,7 +85,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     @Override
     @Nullable
     public ListPopup getPopupStep() {
-        return PairsPopupList.createPairsPopup(myProject, pairConfig, this);
+        return PairsPopupList.createPairsPopup(myProject, pairController, this);
     }
 
     @Override
