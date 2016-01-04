@@ -1,7 +1,6 @@
 <!--
   ~ Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
   -->
-
 <idea-plugin version="2">
     <id>com.smilingrob.gitpair</id>
     <name>Git Pair</name>
@@ -9,8 +8,19 @@
     <vendor email="smilingrob@gmail.com" url="http://smilingrob.com">Robert Wallis</vendor>
 
     <description><![CDATA[
-    See who is paired, and pick your teammates in the GUI.
-    Does not depend on or use the git pair plugin.  The only dependency is git.
+    Pair programming plugin.
+    See who is paired, and pick your teammates in the status bar.
+    Changes the name and email address of your local git user so when you commit you commit as all of the checked people.
+    <br />
+    <img src="https://github.com/robert-wallis/git-pair.idea/raw/master/docs/screen-shot-gc.png" alt="screenshot" />
+    <br />
+    <ul>
+        <li>Does not depend on or use the git pair plugin, just uses git.</li>
+        <li>Supports solo, trio, N, and un-paired development.</li>
+        <li>Alphabetically sorts, deterministic paired emails.</li>
+        <li>Supports email prefix so pair mail can go to a Google Apps alias, prefix+rob+grumpy@example.com (means prefix@example.com on Google).</li>
+    </ul>
+    <a href="https://github.com/robert-wallis/git-pair.idea">Source code</a> available on GitHub.
     ]]></description>
 
     <change-notes><![CDATA[

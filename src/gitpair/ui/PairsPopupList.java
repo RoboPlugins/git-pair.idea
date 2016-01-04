@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
-
 package gitpair.ui;
 
 import com.intellij.openapi.actionSystem.ActionGroup;

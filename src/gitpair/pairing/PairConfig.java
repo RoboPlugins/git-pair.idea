@@ -1,7 +1,6 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
-
 package gitpair.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
