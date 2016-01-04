@@ -4,7 +4,7 @@
 <idea-plugin version="2">
     <id>com.smilingrob.gitpair</id>
     <name>Git Pair</name>
-    <version>1.0</version>
+    <version>1.1</version>
     <vendor email="smilingrob@gmail.com" url="http://smilingrob.com">Robert Wallis</vendor>
 
     <description><![CDATA[
@@ -24,6 +24,9 @@
     ]]></description>
 
     <change-notes><![CDATA[
+    <ul>
+      <li>v1.1 - Going back down to JRE 1.6 instead of 1.7 because my pairing station at work doesn't have a reasonable JRE on it.</li>
+    </ul>
     ]]>
     </change-notes>
 
