@@ -21,9 +21,9 @@ public class Yaml {
     public static Node parse(String fileContents) {
 
         Node rootNode = new Node(null);
-        Stack<Node> parentStack = new Stack<>();
-        Stack<Node> nodeStack = new Stack<>();
-        Stack<Integer> depthStack = new Stack<>();
+        Stack<Node> parentStack = new Stack<Node>();
+        Stack<Node> nodeStack = new Stack<Node>();
+        Stack<Integer> depthStack = new Stack<Integer>();
         parentStack.push(rootNode);
         nodeStack.push(rootNode);
         depthStack.push(-1);

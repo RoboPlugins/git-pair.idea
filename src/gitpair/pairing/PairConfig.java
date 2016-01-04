@@ -19,7 +19,7 @@ public class PairConfig {
 
     private String prefix;
     private String domain;
-    private List<TeamMember> teamMembers = new ArrayList<>();
+    private List<TeamMember> teamMembers = new ArrayList<TeamMember>();
 
     /**
      * Initialize the pair configuration.

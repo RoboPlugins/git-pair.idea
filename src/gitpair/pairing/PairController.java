@@ -31,7 +31,7 @@ public class PairController {
     public PairController(@NotNull PairConfig pairConfig, @NotNull GitRunner gitRunner) {
         this.pairConfig = pairConfig;
         this.gitRunner = gitRunner;
-        this.currentPair = new ArrayList<>();
+        this.currentPair = new ArrayList<TeamMember>();
     }
 
     /**
@@ -40,7 +40,7 @@ public class PairController {
     public void init() {
         List<TeamMember> pairs = findWhoIsPaired();
         if (pairs != null) {
-            currentPair = new ArrayList<>(pairs);
+            currentPair = new ArrayList<TeamMember>(pairs);
         }
     }
 
@@ -132,7 +132,7 @@ public class PairController {
         if (StringUtil.isEmpty(email)) {
             return null;
         }
-        ArrayList<TeamMember> matchingTeam = new ArrayList<>();
+        ArrayList<TeamMember> matchingTeam = new ArrayList<TeamMember>();
         String[] emailSplit = email.split("@");
         if (emailSplit.length < 1) {
             return null;
@@ -163,7 +163,7 @@ public class PairController {
             return null;
         }
 
-        ArrayList<TeamMember> teamArray = new ArrayList<>();
+        ArrayList<TeamMember> teamArray = new ArrayList<TeamMember>();
         for (TeamMember t : teamMembers) {
             if (t != null && t.getEmail() != null) {
                 teamArray.add(t);
@@ -207,7 +207,7 @@ public class PairController {
             return null;
         }
 
-        ArrayList<TeamMember> teamArray = new ArrayList<>();
+        ArrayList<TeamMember> teamArray = new ArrayList<TeamMember>();
         for (TeamMember t : teamMembers) {
             if (t != null && t.getName() != null) {
                 teamArray.add(t);

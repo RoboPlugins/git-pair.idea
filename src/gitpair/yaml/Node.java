@@ -15,7 +15,7 @@ public class Node {
 
     private String key;
     private String value;
-    private List<Node> children = new ArrayList<>();
+    private List<Node> children = new ArrayList<Node>();
 
     /**
      * Create a new Yaml Node.

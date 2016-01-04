@@ -25,7 +25,7 @@ public class PairControllerTest extends TestCase {
         // AND some members
         TeamMember grumpyCat = new TeamMember("gc", "Grumpy Cat", "grumpy.cat");
         TeamMember robert = new TeamMember("rw", "Robert A. Wallis", "robert.wallis");
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(grumpyCat);
         list.add(robert);
 
@@ -36,7 +36,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat & Robert A. Wallis", pairName);
 
         // GIVEN a reversed order list
-        ArrayList<TeamMember> reverseList = new ArrayList<>();
+        ArrayList<TeamMember> reverseList = new ArrayList<TeamMember>();
         reverseList.add(robert);
         reverseList.add(grumpyCat);
 
@@ -53,7 +53,7 @@ public class PairControllerTest extends TestCase {
 
         // AND only one member
         TeamMember robert = new TeamMember("rw", "Robert A. Wallis", "robert.wallis");
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(robert);
 
         // WHEN a pair name is generated
@@ -68,7 +68,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND three members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat"));
         list.add(new TeamMember("pp", "Pinkie Pie", "pinkie.pie"));
         list.add(new TeamMember("rw", "Robert A. Wallis", "robert.wallis"));
@@ -85,7 +85,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND broken members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(null);
         list.add(new TeamMember(null, "Grumpy Cat", "grumpy.cat"));
         list.add(new TeamMember("pp", null, "pinkie.pie"));
@@ -101,7 +101,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat"));
         list.add(new TeamMember("rw", "Robert A. Wallis", "robert.wallis"));
 
@@ -112,7 +112,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("prefix+grumpy.cat+robert.wallis@smilingrob.com", pairName);
 
         // GIVEN a reversed list
-        ArrayList<TeamMember> reversedList = new ArrayList<>();
+        ArrayList<TeamMember> reversedList = new ArrayList<TeamMember>();
         reversedList.add(new TeamMember("rw", "Robert A. Wallis", "robert.wallis"));
         reversedList.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat"));
 
@@ -128,7 +128,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(new TeamMember("rw", "Robert A. Wallis", "robert.wallis"));
 
         // WHEN a pair email is generated
@@ -144,7 +144,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(noPrefixConfig, gitRunner);
 
         // AND some members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(new TeamMember("rw", "Robert A. Wallis", "robert.wallis"));
 
         // WHEN a pair email is generated
@@ -159,7 +159,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat"));
         list.add(new TeamMember("pp", "Pinkie Pie", "pinkie.pie"));
         list.add(new TeamMember("rw", "Robert A. Wallis", "robert.wallis"));
@@ -176,7 +176,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND some members
-        ArrayList<TeamMember> list = new ArrayList<>();
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(null);
         list.add(new TeamMember("gc", null, "grumpy.cat"));
         list.add(new TeamMember("pp", "Pinkie Pie", null));
