@@ -1,11 +1,16 @@
+<!--
+  ~ Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+  -->
+
 <idea-plugin version="2">
-    <id>com.smilingrob.gitpairpicker</id>
-    <name>Git Pair Picker</name>
+    <id>com.smilingrob.gitpair</id>
+    <name>Git Pair</name>
     <version>1.0</version>
     <vendor email="smilingrob@gmail.com" url="http://smilingrob.com">Robert Wallis</vendor>
 
     <description><![CDATA[
-    See who is paired, and pick your <code>git pair</code> pairs in the GUI.
+    See who is paired, and pick your teammates in the GUI.
+    Does not depend on or use the git pair plugin.  The only dependency is git.
     ]]></description>
 
     <change-notes><![CDATA[
@@ -29,7 +34,7 @@
 
     <project-components>
         <component>
-            <implementation-class>gitpairpicker.GitPairProjectComponent</implementation-class>
+            <implementation-class>gitpair.GitPairProjectComponent</implementation-class>
         </component>
     </project-components>
 </idea-plugin>

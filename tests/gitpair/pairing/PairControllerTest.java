@@ -2,9 +2,9 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.pairing;
+package gitpair.pairing;
 
-import gitpairpicker.git.GitRunner;
+import gitpair.git.GitRunner;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;

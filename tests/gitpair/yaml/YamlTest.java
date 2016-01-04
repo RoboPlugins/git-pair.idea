@@ -1,7 +1,8 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
-package gitpairpicker.yaml;
+
+package gitpair.yaml;
 
 import junit.framework.TestCase;
 

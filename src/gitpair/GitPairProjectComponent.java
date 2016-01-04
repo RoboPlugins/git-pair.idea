@@ -1,11 +1,12 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
-package gitpairpicker;
+
+package gitpair;
 
 import com.intellij.openapi.components.ProjectComponent;
 import com.intellij.openapi.project.Project;
-import gitpairpicker.ui.GitPairWidget;
+import gitpair.ui.GitPairWidget;
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -35,7 +36,7 @@ public class GitPairProjectComponent implements ProjectComponent {
     @Override
     @NotNull
     public String getComponentName() {
-        return "gitpairpicker.GitPairProjectComponent";
+        return "gitpair.GitPairProjectComponent";
     }
 
     @Override

@@ -1,4 +1,8 @@
-package gitpairpicker.pairing;
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ */
+
+package gitpair.pairing;
 
 /**
  * An individual team member that can pair.

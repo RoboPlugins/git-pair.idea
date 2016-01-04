@@ -2,7 +2,7 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.git;
+package gitpair.git;
 
 import com.intellij.execution.ExecutionException;
 import com.intellij.execution.configurations.GeneralCommandLine;

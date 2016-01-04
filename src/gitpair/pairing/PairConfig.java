@@ -2,11 +2,11 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.pairing;
+package gitpair.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
-import gitpairpicker.yaml.Node;
-import gitpairpicker.yaml.Yaml;
+import gitpair.yaml.Node;
+import gitpair.yaml.Yaml;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

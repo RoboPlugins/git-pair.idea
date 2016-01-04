@@ -2,10 +2,10 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.pairing;
+package gitpair.pairing;
 
-import gitpairpicker.yaml.Node;
-import gitpairpicker.yaml.Yaml;
+import gitpair.yaml.Node;
+import gitpair.yaml.Yaml;
 import junit.framework.TestCase;
 
 import java.util.List;

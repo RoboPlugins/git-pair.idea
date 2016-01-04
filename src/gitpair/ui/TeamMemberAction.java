@@ -2,12 +2,12 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.ui;
+package gitpair.ui;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.ToggleAction;
 import com.sun.istack.internal.NotNull;
-import gitpairpicker.pairing.TeamMember;
+import gitpair.pairing.TeamMember;
 
 /**
  * Represents a row in the {@link PairsPopupList}, an individual that could be pairing right now.

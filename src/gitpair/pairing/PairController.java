@@ -2,10 +2,10 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.pairing;
+package gitpair.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
-import gitpairpicker.git.GitRunner;
+import gitpair.git.GitRunner;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

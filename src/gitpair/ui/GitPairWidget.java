@@ -2,7 +2,7 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.ui;
+package gitpair.ui;
 
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
@@ -15,10 +15,10 @@ import com.intellij.openapi.wm.WindowManager;
 import com.intellij.openapi.wm.impl.status.EditorBasedWidget;
 import com.intellij.util.Consumer;
 import com.intellij.util.ObjectUtils;
-import gitpairpicker.git.GitRunner;
-import gitpairpicker.pairing.PairConfig;
-import gitpairpicker.pairing.PairController;
-import gitpairpicker.pairing.TeamMember;
+import gitpair.git.GitRunner;
+import gitpair.pairing.PairConfig;
+import gitpair.pairing.PairController;
+import gitpair.pairing.TeamMember;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

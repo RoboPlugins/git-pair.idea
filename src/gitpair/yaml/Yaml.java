@@ -1,5 +1,7 @@
-// Copyright (C) 2016 Robert A. Wallis, ALl Rights Reserved.
-package gitpairpicker.yaml;
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ */
+package gitpair.yaml;
 
 import com.intellij.openapi.util.text.StringUtil;
 

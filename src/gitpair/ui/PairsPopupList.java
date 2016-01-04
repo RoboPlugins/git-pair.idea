@@ -2,16 +2,16 @@
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 
-package gitpairpicker.ui;
+package gitpair.ui;
 
 import com.intellij.openapi.actionSystem.ActionGroup;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.project.Project;
 import com.intellij.ui.popup.PopupFactoryImpl;
-import gitpairpicker.pairing.PairConfig;
-import gitpairpicker.pairing.PairController;
-import gitpairpicker.pairing.TeamMember;
+import gitpair.pairing.PairConfig;
+import gitpair.pairing.PairController;
+import gitpair.pairing.TeamMember;
 import org.jetbrains.annotations.NotNull;
 
 /**
