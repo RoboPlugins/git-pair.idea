@@ -71,7 +71,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         PairConfig pairConfig = new PairConfig(configYaml);
         pairController = new PairController(pairConfig, gitRunner);
         pairController.init();
-        update();
+        updateWidgetView();
 
         return true;
     }
@@ -84,6 +84,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     @Override
     @Nullable
     public ListPopup getPopupStep() {
+        updateState(); // make sure we have the latest info that chould have changed in the background
         return PairsPopupList.createPairsPopup(myProject, pairController, this);
     }
 
@@ -136,7 +137,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         if (!pairController.isPaired(teamMember)) {
             pairController.toggleTeamMember(teamMember);
         }
-        update();
+        updateWidgetView();
     }
 
     @Override
@@ -144,7 +145,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         if (pairController.isPaired(teamMember)) {
             pairController.toggleTeamMember(teamMember);
         }
-        update();
+        updateWidgetView();
     }
 
     /**
@@ -159,7 +160,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
                 StatusBar statusBar = WindowManager.getInstance().getStatusBar(project);
                 if (statusBar != null && !isDisposed()) {
                     statusBar.addWidget(GitPairWidget.this, "after " + (SystemInfo.isMac ? "Encoding" : "InsertOverwrite"), project);
-                    update();
+                    updateWidgetView();
                 }
             }
         });
@@ -168,7 +169,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     /**
      * Refresh the view on the status bar.
      */
-    private void update() {
+    private void updateWidgetView() {
         selectedPair = pairController.getPairDisplayName();
         if (myStatusBar != null) {
             myStatusBar.updateWidget(ID());
