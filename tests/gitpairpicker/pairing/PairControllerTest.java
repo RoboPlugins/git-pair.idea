@@ -226,4 +226,30 @@ public class PairControllerTest extends TestCase {
         assertNotNull(team1);
         assertEquals("Grumpy Cat", team1.get(0).getName());
     }
+
+    public void testToggleTeamMemberOff() throws Exception {
+        // GIVEN a valid configuration and a configured email
+        PairController pairController = new PairController(pairConfig, gitRunner);
+        gitRunner.setUserEmail("grumpy.cat+robert.wallis");
+        pairController.init();
+
+        // WHEN a team member is toggled off
+        pairController.toggleTeamMember(pairConfig.getTeamMemberByInitials("gc"));
+
+        // THEN the team member should be toggled off
+        assertEquals("Robert A. Wallis", pairController.getPairDisplayName());
+    }
+
+    public void testToggleTeamMemberOn() throws Exception {
+        // GIVEN a valid configuration and a configured email
+        PairController pairController = new PairController(pairConfig, gitRunner);
+        gitRunner.setUserEmail("robert.wallis");
+        pairController.init();
+
+        // WHEN a team member is toggled on
+        pairController.toggleTeamMember(pairConfig.getTeamMemberByInitials("gc"));
+
+        // THEN the team member should be toggled on
+        assertEquals("Grumpy Cat & Robert A. Wallis", pairController.getPairDisplayName());
+    }
 }

@@ -89,4 +89,17 @@ public class PairConfigTest extends TestCase {
         assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
     }
 
+    public void testGetTeamMemberByInitials() throws Exception {
+        // GIVEN a valid configuration
+        PairConfig pairConfig = new PairConfig(YAML_SOURCE);
+
+        // WHEN the team member is queried by initials
+        TeamMember teamMember = pairConfig.getTeamMemberByInitials("rw");
+
+        // THEN it should return the correct team member
+        assertEquals("Robert A. Wallis", teamMember.getName());
+        assertEquals("robert.wallis", teamMember.getEmail());
+        assertEquals("rw", teamMember.getInitials());
+    }
+
 }

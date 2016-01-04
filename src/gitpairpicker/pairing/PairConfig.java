@@ -112,6 +112,24 @@ public class PairConfig {
     }
 
     /**
+     * Find the team member by initials and return it.
+     *
+     * @param initials initals to look up.
+     * @return the team member or null if there was an error.
+     */
+    public TeamMember getTeamMemberByInitials(String initials) {
+        if (initials == null) {
+            return null;
+        }
+        for (TeamMember member : teamMembers) {
+            if (initials.equals(member.getInitials())) {
+                return member;
+            }
+        }
+        return null;
+    }
+
+    /**
      * Get all the team members from the configuration.
      *
      * @return list of team members that can check in.
