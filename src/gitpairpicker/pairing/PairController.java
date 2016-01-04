@@ -49,16 +49,21 @@ public class PairController {
      * Add or remove a team member.
      *
      * @param teamMember team member to turn on or off.
+     * @return true if paired.
      */
-    public void toggleTeamMember(TeamMember teamMember) {
+    public boolean toggleTeamMember(TeamMember teamMember) {
         if (teamMember == null || StringUtil.isEmpty(teamMember.getEmail())) {
-            return;
+            return false;
         }
+
+        boolean paired;
 
         if (currentPair.contains(teamMember)) {
             currentPair.remove(teamMember);
+            paired = false;
         } else {
             currentPair.add(teamMember);
+            paired = true;
         }
 
         String email = generatePairEmail(currentPair);
@@ -70,6 +75,8 @@ public class PairController {
         if (email != null) {
             gitRunner.setUserEmail(email);
         }
+
+        return paired;
     }
 
     /**
@@ -79,13 +86,18 @@ public class PairController {
      */
     @Nullable
     public String getPairDisplayName() {
-        return generatePairName(currentPair);
+        if (currentPair != null && currentPair.size() > 0) {
+            return generatePairName(currentPair);
+        } else {
+            return "git pair";
+        }
     }
 
     /**
      * Is the current team member paired?
-     * @param teamMember team meber to check.
-     * @return true if team meber is currently paired.
+     *
+     * @param teamMember team member to check.
+     * @return true if team member is currently paired.
      */
     public boolean isPaired(@Nullable TeamMember teamMember) {
         return currentPair.contains(teamMember);
@@ -142,8 +154,8 @@ public class PairController {
     /**
      * Calculate what the git user.email should be given some team members.
      *
-     * @param teamMembers list of team emmbers.
-     * @return emailable email for the team.
+     * @param teamMembers list of team members.
+     * @return email-able email for the team.
      */
     @Nullable
     String generatePairEmail(List<TeamMember> teamMembers) {
@@ -158,7 +170,7 @@ public class PairController {
                 teamArray.add(t);
             }
         }
-        Collections.sort(teamArray, new AlphebeticalName()); // email order should still be name order
+        Collections.sort(teamArray, new AlphabeticalName()); // email order should still be name order
 
         StringBuilder sb = new StringBuilder();
 
@@ -202,7 +214,7 @@ public class PairController {
                 teamArray.add(t);
             }
         }
-        Collections.sort(teamArray, new AlphebeticalName());
+        Collections.sort(teamArray, new AlphabeticalName());
 
         StringBuilder sb = new StringBuilder();
         int size = teamArray.size();
@@ -224,7 +236,7 @@ public class PairController {
     /**
      * Compare two TeamMembers by name.
      */
-    private static class AlphebeticalName implements Comparator<TeamMember> {
+    private static class AlphabeticalName implements Comparator<TeamMember> {
         @Override
         public int compare(TeamMember o1, TeamMember o2) {
             if (o1 == null || o1.getName() == null) {

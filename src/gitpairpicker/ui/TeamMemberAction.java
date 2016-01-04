@@ -5,24 +5,15 @@
 package gitpairpicker.ui;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
-import com.intellij.openapi.project.DumbAwareAction;
-import com.intellij.ui.popup.KeepingPopupOpenAction;
-import com.intellij.util.PlatformIcons;
-import com.intellij.util.ui.EmptyIcon;
+import com.intellij.openapi.actionSystem.ToggleAction;
 import com.sun.istack.internal.NotNull;
 import gitpairpicker.pairing.TeamMember;
-
-import javax.swing.*;
 
 /**
  * Represents a row in the {@link PairsPopupList}, an individual that could be pairing right now.
  */
 @SuppressWarnings("ComponentNotRegistered") // It's dynamic, so registering it won't help.
-public class TeamMemberAction extends DumbAwareAction implements KeepingPopupOpenAction {
-
-    private final static Icon ON = PlatformIcons.CHECK_ICON;
-    private final static Icon ON_SELECTED = PlatformIcons.CHECK_ICON_SELECTED;
-    private final static Icon OFF = EmptyIcon.create(ON.getIconHeight());
+public class TeamMemberAction extends ToggleAction {
 
     private TeamMember teamMember;
     private TeamMemberActionPerformer teamMemberActionPerformer;
@@ -32,21 +23,24 @@ public class TeamMemberAction extends DumbAwareAction implements KeepingPopupOpe
      *
      * @param teamMember model representing a team member.
      */
-    public TeamMemberAction(@NotNull TeamMember teamMember, boolean isPaired, @NotNull TeamMemberActionPerformer actionPerformer) {
+    public TeamMemberAction(@NotNull TeamMember teamMember, @NotNull TeamMemberActionPerformer actionPerformer) {
         super(teamMember.getName());
         this.teamMember = teamMember;
         this.teamMemberActionPerformer = actionPerformer;
-        getTemplatePresentation().setIcon(isPaired ? ON : OFF);
-        getTemplatePresentation().setSelectedIcon(ON_SELECTED);
     }
 
     @Override
-    public void actionPerformed(AnActionEvent anActionEvent) {
-        teamMemberActionPerformer.onTeamMemberActionPerformed(teamMember);
+    public boolean isSelected(AnActionEvent anActionEvent) {
+        return teamMemberActionPerformer.isTeamMemberSelected(teamMember);
     }
 
-    public TeamMember getTeamMember() {
-        return teamMember;
+    @Override
+    public void setSelected(AnActionEvent anActionEvent, boolean b) {
+        if (b) {
+            teamMemberActionPerformer.onSelectTeamMember(teamMember);
+        } else {
+            teamMemberActionPerformer.onDeselectTeamMember(teamMember);
+        }
     }
 
     /**
@@ -54,10 +48,22 @@ public class TeamMemberAction extends DumbAwareAction implements KeepingPopupOpe
      */
     public interface TeamMemberActionPerformer {
         /**
-         * Event when a team member is clicked.
+         * @return true if the team member is selected.
+         */
+        boolean isTeamMemberSelected(TeamMember teamMember);
+
+        /**
+         * Make sure team member is selected.
          *
          * @param teamMember that was clicked.
          */
-        void onTeamMemberActionPerformed(TeamMember teamMember);
+        void onSelectTeamMember(TeamMember teamMember);
+
+        /**
+         * Make sure team member is selected.
+         *
+         * @param teamMember that was clicked.
+         */
+        void onDeselectTeamMember(TeamMember teamMember);
     }
 }

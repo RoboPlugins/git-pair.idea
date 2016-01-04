@@ -40,7 +40,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     /**
      * Widget to be shown in the bottom left to indicate which pair is active, and allow a choice of new pair.
      *
-     * @param project from IntelliJ.
+     * @param project from idea.
      */
     public GitPairWidget(@NotNull Project project) {
         super(project);
@@ -72,7 +72,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         PairConfig pairConfig = new PairConfig(configYaml);
         pairController = new PairController(pairConfig, gitRunner);
         pairController.init();
-        selectedPair = pairController.getPairDisplayName();
+        update();
 
         return true;
     }
@@ -128,16 +128,30 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     }
 
     @Override
-    public void onTeamMemberActionPerformed(TeamMember teamMember) {
-        pairController.toggleTeamMember(teamMember);
-        selectedPair = pairController.getPairDisplayName();
+    public boolean isTeamMemberSelected(TeamMember teamMember) {
+        return pairController.isPaired(teamMember);
+    }
+
+    @Override
+    public void onSelectTeamMember(TeamMember teamMember) {
+        if (!pairController.isPaired(teamMember)) {
+            pairController.toggleTeamMember(teamMember);
+        }
+        update();
+    }
+
+    @Override
+    public void onDeselectTeamMember(TeamMember teamMember) {
+        if (pairController.isPaired(teamMember)) {
+            pairController.toggleTeamMember(teamMember);
+        }
         update();
     }
 
     /**
      * Insert this widget into the status bar in the correct position.
      *
-     * @param project IntelliJ Project.
+     * @param project idea Project.
      */
     public void installWidgetToStatusBar(@NotNull final Project project) {
         ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -156,6 +170,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
      * Refresh the view on the status bar.
      */
     private void update() {
+        selectedPair = pairController.getPairDisplayName();
         if (myStatusBar != null) {
             myStatusBar.updateWidget(ID());
         }

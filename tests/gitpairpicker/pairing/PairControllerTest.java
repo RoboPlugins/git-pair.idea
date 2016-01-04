@@ -253,6 +253,19 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat & Robert A. Wallis", pairController.getPairDisplayName());
     }
 
+    public void testNoTeamMemberTitle() throws Exception {
+        // GIVEN a valid configuration
+        PairController pairController = new PairController(pairConfig, gitRunner);
+
+        // AND an invalid email
+        gitRunner.setUserEmail("not.valid");
+        pairController.init();
+
+        // WHEN the display name is fetched
+        // THEN it should show git pair
+        assertEquals("git pair", pairController.getPairDisplayName());
+    }
+
     public void testIsPaired() throws Exception {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);

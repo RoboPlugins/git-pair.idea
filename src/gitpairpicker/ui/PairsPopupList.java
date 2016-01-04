@@ -5,11 +5,9 @@
 package gitpairpicker.ui;
 
 import com.intellij.openapi.actionSystem.ActionGroup;
-import com.intellij.openapi.actionSystem.AnAction;
 import com.intellij.openapi.actionSystem.DefaultActionGroup;
 import com.intellij.openapi.actionSystem.impl.SimpleDataContext;
 import com.intellij.openapi.project.Project;
-import com.intellij.openapi.util.Condition;
 import com.intellij.ui.popup.PopupFactoryImpl;
 import gitpairpicker.pairing.PairConfig;
 import gitpairpicker.pairing.PairController;
@@ -21,34 +19,32 @@ import org.jetbrains.annotations.NotNull;
  */
 public class PairsPopupList extends PopupFactoryImpl.ActionGroupPopup {
 
-    private static final String POPUP_TITLE = "Git Pair";
+    private static final String POPUP_TITLE = "git pair";
 
     /**
      * Make a new popup menu with a list of pairs.
      *
-     * @param project                  IntelliJ Project.
-     * @param preselectActionCondition Which rows should be selected, which pairs are paired.
-     * @param actionGroup              List of pairs/actions.
+     * @param project     idea Project.
+     * @param actionGroup List of pairs/actions.
      */
-    private PairsPopupList(@NotNull Project project, @NotNull Condition<AnAction> preselectActionCondition, ActionGroup actionGroup) {
-        super(POPUP_TITLE, actionGroup, SimpleDataContext.getProjectContext(project), false, false, true, false, null, -1, preselectActionCondition, null);
+    private PairsPopupList(@NotNull Project project, ActionGroup actionGroup) {
+        super(POPUP_TITLE, actionGroup, SimpleDataContext.getProjectContext(project), false, false, true, false, null, -1, null, null);
     }
 
     /**
      * Construct a PairsPopupList.  Adds the rows for you.
      *
-     * @param project        IntelliJ Project.
+     * @param project        idea Project.
      * @param pairController Pair logic controller.
      * @return a new popup menu.
      */
     public static PairsPopupList createPairsPopup(@NotNull Project project, @NotNull PairController pairController, @NotNull TeamMemberAction.TeamMemberActionPerformer teamMemberActionPerformer) {
-        Condition<AnAction> preselectActionCondition = new GitPairPreselectCondition(pairController);
         ActionGroup actionGroup = createActions(pairController, teamMemberActionPerformer);
-        return new PairsPopupList(project, preselectActionCondition, actionGroup);
+        return new PairsPopupList(project, actionGroup);
     }
 
     /**
-     * Create a list of IntelliJ actions that the user can choose, to change their pairs.
+     * Create a list of idea actions that the user can choose, to change their pairs.
      *
      * @param pairController Pair logic controller for list of members.
      * @return list of actions.
@@ -58,33 +54,9 @@ public class PairsPopupList extends PopupFactoryImpl.ActionGroupPopup {
         PairConfig pairConfig = pairController.getPairConfig();
 
         for (TeamMember teamMember : pairConfig.getTeamMembers()) {
-            defaultActionGroup.add(new TeamMemberAction(teamMember, pairController.isPaired(teamMember), teamMemberActionPerformer));
+            defaultActionGroup.add(new TeamMemberAction(teamMember, teamMemberActionPerformer));
         }
 
         return defaultActionGroup;
-    }
-
-    /**
-     * Handles selecting users (Action rows) that are currently paired.
-     */
-    private static class GitPairPreselectCondition implements Condition<AnAction> {
-
-        private PairController pairController;
-
-        /**
-         * @param pairController pair controller to check if team member is currently paired, for selection.
-         */
-        public GitPairPreselectCondition(PairController pairController) {
-            this.pairController = pairController;
-        }
-
-        @Override
-        public boolean value(AnAction anAction) {
-            if (anAction instanceof TeamMemberAction) {
-                TeamMemberAction teamMemberAction = (TeamMemberAction) anAction;
-                return pairController.isPaired(teamMemberAction.getTeamMember());
-            }
-            return false;
-        }
     }
 }
