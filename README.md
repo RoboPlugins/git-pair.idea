@@ -1,8 +1,4 @@
-# Work In Progress
-
-This is not functional yet, but I will remove this message when I get it working.
-
-# Git Pair Plugin
+# Git Pair
 
 Plugin for the Idea platform ([IntelliJ](https://www.jetbrains.com/idea/), [AppCode](https://www.jetbrains.com/objc/), [Android Studio](http://developer.android.com/tools/studio/index.html)) that helps you do pair programming.
 
