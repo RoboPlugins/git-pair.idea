@@ -252,4 +252,19 @@ public class PairControllerTest extends TestCase {
         // THEN the team member should be toggled on
         assertEquals("Grumpy Cat & Robert A. Wallis", pairController.getPairDisplayName());
     }
+
+    public void testIsPaired() throws Exception {
+        // GIVEN a valid configuration and a configured email
+        PairController pairController = new PairController(pairConfig, gitRunner);
+        gitRunner.setUserEmail("robert.wallis");
+        pairController.init();
+
+        // WHEN a team member is toggled on
+        boolean isPairedRw = pairController.isPaired(pairConfig.getTeamMemberByInitials("rw"));
+        boolean isPairedGc = pairController.isPaired(pairConfig.getTeamMemberByInitials("gc"));
+
+        // THEN the team member should be paired
+        assertTrue(isPairedRw);
+        assertFalse(isPairedGc);
+    }
 }

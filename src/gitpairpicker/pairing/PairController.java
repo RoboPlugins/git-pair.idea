@@ -83,6 +83,19 @@ public class PairController {
     }
 
     /**
+     * Is the current team member paired?
+     * @param teamMember team meber to check.
+     * @return true if team meber is currently paired.
+     */
+    public boolean isPaired(@Nullable TeamMember teamMember) {
+        return currentPair.contains(teamMember);
+    }
+
+    public PairConfig getPairConfig() {
+        return pairConfig;
+    }
+
+    /**
      * Figure out who is paired and return the list.
      *
      * @return list of currently paired members.
