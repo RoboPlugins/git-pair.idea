@@ -112,7 +112,7 @@ public class GitRunner {
                 filename = dir + "/git";
             }
             File file = new File(filename);
-            if (file.exists()) {
+            if (file.exists() && file.isFile()) {
                 gitPathCache = filename;
                 return gitPathCache;
             }

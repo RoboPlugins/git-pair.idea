@@ -26,7 +26,7 @@
     <change-notes><![CDATA[
     <ul>
       <li>v1.1 - Going back down to JRE 1.6 instead of 1.7 because my pairing station at work doesn't have a reasonable JRE on it.</li>
-      <li>v1.2 - Fixing missing Files and Path class in JRE 1.6</li>
+      <li>v1.2 - Fixing missing Files and Path class in JRE 1.6.</li>
     </ul>
     ]]>
     </change-notes>
