@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
+
 package gitpairpicker.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
@@ -25,8 +26,11 @@ public class PairConfig {
 
     /**
      * Initialize the pair configuration.
+     *
+     * @param yamlSource contents of the .pairs file.
      */
-    public PairConfig() {
+    public PairConfig(String yamlSource) {
+        configureWithYamlSource(yamlSource);
     }
 
     /**
@@ -83,7 +87,7 @@ public class PairConfig {
      *
      * @param yamlSource contents of the .pairs file.
      */
-    public void configureWithYamlSource(String yamlSource) {
+    private void configureWithYamlSource(String yamlSource) {
         Node root = Yaml.parse(yamlSource);
         if (root != null) {
             Node emailNode = root.get("email");

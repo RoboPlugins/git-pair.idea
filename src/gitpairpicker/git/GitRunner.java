@@ -1,5 +1,5 @@
-/**
- * Copyright (C) 2016 Robert A. Wallis.  All Rights Reserved.
+/*
+ * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
 package gitpairpicker.git;
 
@@ -10,6 +10,7 @@ import com.intellij.execution.process.ProcessOutput;
 import com.intellij.openapi.util.SystemInfo;
 import com.intellij.openapi.util.text.StringUtil;
 import com.intellij.util.EnvironmentUtil;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
@@ -39,8 +40,21 @@ public class GitRunner {
      * @return returns the current configured user email or null on error.
      */
     @Nullable
-    public String runGitConfigUserEmail() {
-        return runGitCommand("config", "user.email");
+    public String getUserEmail() {
+        String output = runGitCommand("config", "user.email");
+        if (output != null) {
+            return output.trim();
+        }
+        return null;
+    }
+
+    /**
+     * Run `git config user.email example@example.com` and return the current configured user.
+     *
+     * @param fullEmail the current email of the user, for example "example@example.com".
+     */
+    public void setUserEmail(@NotNull String fullEmail) {
+        runGitCommand("config", "user.email", fullEmail);
     }
 
     /**
@@ -92,7 +106,7 @@ public class GitRunner {
      * @return output of the git command.
      */
     @Nullable
-    private String runGitCommand(String... parameters) {
+    String runGitCommand(String... parameters) {
         String gitPath = findGitExePath();
         if (!StringUtil.isNotEmpty(gitPath)) {
             // git will fail, because we can't find it, so we exit early
@@ -126,7 +140,7 @@ public class GitRunner {
         String output = processOutput.getStdout();
 
         if (processOutput.getExitCode() != 0) {
-            System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + output);
+            System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + processOutput.getStderr());
             return null;
         }
 

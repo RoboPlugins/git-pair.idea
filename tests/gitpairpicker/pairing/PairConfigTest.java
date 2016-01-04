@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
+
 package gitpairpicker.pairing;
 
 import gitpairpicker.yaml.Node;
@@ -29,8 +30,7 @@ public class PairConfigTest extends TestCase {
 
     public void testFindAllTeamMembers() throws Exception {
         // GIVEN a configuration
-        PairConfig pairConfig = new PairConfig();
-        pairConfig.configureWithYamlSource(YAML_SOURCE);
+        PairConfig pairConfig = new PairConfig(YAML_SOURCE);
 
         // WHEN I load all the team members.
         List<TeamMember> teamMembers = pairConfig.getTeamMembers();
