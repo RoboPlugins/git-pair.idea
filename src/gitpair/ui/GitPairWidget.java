@@ -22,9 +22,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.MouseEvent;
+import java.io.BufferedReader;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 /**
  * Visible menu to be shown in the bottom left to indicate which pair is active, and allow a choice of new pair.
@@ -60,9 +60,13 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         }
 
         String configFile = projectPath.concat("/.pairs");
-        String configYaml;
+        String configYaml = "";
         try {
-            configYaml = new String(Files.readAllBytes(Paths.get(configFile)));
+            BufferedReader br = new BufferedReader(new FileReader(configFile));
+            String line;
+            while ((line = br.readLine()) != null) {
+                configYaml += line + "\n";
+            }
         } catch (IOException e) {
             System.out.println("Git Pair plugin couldn't open " + configFile + ": " + e.getMessage());
             return false;
