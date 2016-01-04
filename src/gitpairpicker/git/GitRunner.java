@@ -1,6 +1,7 @@
 /*
  * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
  */
+
 package gitpairpicker.git;
 
 import com.intellij.execution.ExecutionException;
@@ -55,6 +56,29 @@ public class GitRunner {
      */
     public void setUserEmail(@NotNull String fullEmail) {
         runGitCommand("config", "user.email", fullEmail);
+    }
+
+    /**
+     * Run `git config user.name` and return the current configured user.
+     *
+     * @return returns the current configured user email or null on error.
+     */
+    @Nullable
+    public String getUserName() {
+        String output = runGitCommand("config", "user.name");
+        if (output != null) {
+            return output.trim();
+        }
+        return null;
+    }
+
+    /**
+     * Run `git config user.name Bubba` and return the current configured user.
+     *
+     * @param fullName the current name of the user, for example "Bubba".
+     */
+    public void setUserName(@NotNull String fullName) {
+        runGitCommand("config", "user.name", fullName);
     }
 
     /**

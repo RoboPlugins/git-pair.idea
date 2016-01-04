@@ -21,7 +21,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         // THEN it should return the current user's email
         String configuredEmail = gitRunner.getUserEmail();
         assertNotNull(configuredEmail);
-        assertEquals("setup@example.com", "setup@example.com");
+        assertEquals("setup@example.com", configuredEmail);
     }
 
     public void testSetUserEmail() throws Exception {
@@ -37,4 +37,29 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("testSetUserEmail@example.com", gitRunner.getUserEmail());
     }
 
+    public void testGetUserName() throws Exception {
+        // GIVEN a system with git installed and a project configured with git
+        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        gitRunner.runGitCommand("init");
+        gitRunner.runGitCommand("config", "user.name", "TestUserName");
+
+        // WHEN we run `git config user.name`
+        // THEN it should return the current user's name
+        String configuredName = gitRunner.getUserName();
+        assertNotNull(configuredName);
+        assertEquals("TestUserName", configuredName);
+    }
+
+    public void testSetUserName() throws Exception {
+        // GIVEN a system with git installed and a project configured with git
+        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        gitRunner.runGitCommand("init");
+        gitRunner.runGitCommand("config", "user.name", "setup");
+
+        // WHEN we run `git config user.name "Test User Name & Stuff"`
+        gitRunner.setUserName("Test User Name & Stuff");
+
+        // THEN it should set current user's name
+        assertEquals("Test User Name & Stuff", gitRunner.getUserName());
+    }
 }
