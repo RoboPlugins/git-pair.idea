@@ -94,7 +94,7 @@ public class GitRunner {
         }
 
         String path = EnvironmentUtil.getValue("PATH");
-        if (!StringUtil.isNotEmpty(path)) {
+        if (StringUtil.isEmpty(path)) {
             return null;
         }
 
@@ -132,7 +132,7 @@ public class GitRunner {
     @Nullable
     String runGitCommand(String... parameters) {
         String gitPath = findGitExePath();
-        if (!StringUtil.isNotEmpty(gitPath)) {
+        if (StringUtil.isEmpty(gitPath)) {
             // git will fail, because we can't find it, so we exit early
             return null;
         }

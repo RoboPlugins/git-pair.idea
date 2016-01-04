@@ -7,13 +7,14 @@ package gitpairpicker.pairing;
 import junit.framework.TestCase;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Test pairing logic.
  */
 public class PairControllerTest extends TestCase {
 
-    PairConfig pairConfig = new PairConfig("prefix", "smilingrob.com");
+    PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
 
     public void testGeneratePairName() throws Exception {
         // GIVEN a configuration
@@ -182,5 +183,42 @@ public class PairControllerTest extends TestCase {
         // WHEN a pair email is generated
         // THEN it shouldn't crash
         assertEquals("prefix+robert.wallis+grumpy.cat@smilingrob.com", pairController.generatePairEmail(list));
+    }
+
+    public void testPairMatcher() throws Exception {
+        // GIVEN a valid configuration and a configured email
+        PairController pairController = new PairController(pairConfig, "");
+        String email = "prefix+grumpy.cat+robert.wallis@smilingrob.com";
+
+        // WHEN we get the members that match the email
+        List<TeamMember> team = pairController.matchTeamMembersFromEmail(email);
+
+        // THEN the list should match the members
+        assertEquals(2, team.size());
+        assertEquals("Grumpy Cat", team.get(0).getName());
+        assertEquals("Robert A. Wallis", team.get(1).getName());
+    }
+
+    public void testPairMatcherBadData() throws Exception {
+        // GIVEN a valid configuration and a configured email
+        PairController pairController = new PairController(pairConfig, "");
+
+        // WHEN the email has no matching names
+        // THEN it shouldn't crash
+        pairController.matchTeamMembersFromEmail("");
+
+        // WHEN the email is null
+        // THEN it shouldn't crash
+        pairController.matchTeamMembersFromEmail(null);
+
+        // WHEN the email is not really an email
+        // THEN it should still match
+        List<TeamMember> team = pairController.matchTeamMembersFromEmail("grumpy.cat");
+        assertEquals("Grumpy Cat", team.get(0).getName());
+
+        // WHEN the email is a bit malformed
+        // THEN it should still match
+        List<TeamMember> team1 = pairController.matchTeamMembersFromEmail("+grumpy.cat+");
+        assertEquals("Grumpy Cat", team1.get(0).getName());
     }
 }

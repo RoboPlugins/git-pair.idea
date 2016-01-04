@@ -33,6 +33,40 @@ public class PairController {
         this.projectBasePath = projectBasePath;
     }
 
+    /**
+     * Given an email address, which team members match that email address.
+     * Looks in the PairConfig for matching emails.
+     *
+     * @param email address to parse.
+     * @return list of matching members, or null if there were errors
+     */
+    List<TeamMember> matchTeamMembersFromEmail(String email) {
+        if (StringUtil.isEmpty(email)) {
+            return null;
+        }
+        ArrayList<TeamMember> matchingTeam = new ArrayList<>();
+        String[] emailSplit = email.split("@");
+        if (emailSplit.length < 1) {
+            return null;
+        }
+        String[] aliases = emailSplit[0].split("\\+");
+
+        for (String alias : aliases) {
+            for (TeamMember teamMember : pairConfig.getTeamMembers()) {
+                if (alias.equals(teamMember.getEmail())) {
+                    matchingTeam.add(teamMember);
+                }
+            }
+        }
+
+        return matchingTeam;
+    }
+
+    /**
+     * Add or remove a team member.
+     *
+     * @param teamMember team member to turn on or off.
+     */
     public void toggleTeamMember(TeamMember teamMember) {
         if (currentPair.contains(teamMember)) {
             currentPair.remove(teamMember);
@@ -56,6 +90,12 @@ public class PairController {
         return generatePairName(currentPair);
     }
 
+    /**
+     * Figure out who is paired and return the list.
+     * Also updates internal currentPair.
+     *
+     * @return List of currently paired team members.
+     */
     List<TeamMember> findWhoIsPaired() {
         // TODO: actually check email
         return currentPair;

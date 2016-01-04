@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class PairConfigTest extends TestCase {
 
-    static final String YAML_SOURCE = "# This is a comment.\n" +
+    public static final String YAML_SOURCE = "# This is a comment.\n" +
             "\n" +
             "pairs:\n" +
             "  gc: Grumpy Cat;grumpy.cat\n" +
@@ -23,7 +23,7 @@ public class PairConfigTest extends TestCase {
             "  rw: Robert A. Wallis; robert.wallis\n" +
             "\n" +
             "email:\n" +
-            "  prefix:\n" +
+            "  prefix: prefix\n" +
             "  domain: smilingrob.com\n" +
             "\n" +
             "global: true\n";
