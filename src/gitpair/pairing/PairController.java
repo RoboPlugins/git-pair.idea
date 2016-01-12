@@ -72,7 +72,7 @@ public class PairController {
             gitRunner.setUserName(name);
         }
         if (email != null) {
-            gitRunner.setUserEmail(email);
+            gitRunner.setUserEmail(email, pairConfig.shouldChangeGlobalUser());
         }
 
         return paired;

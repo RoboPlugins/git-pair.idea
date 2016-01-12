@@ -230,7 +230,7 @@ public class PairControllerTest extends TestCase {
     public void testToggleTeamMemberOff() throws Exception {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
-        gitRunner.setUserEmail("grumpy.cat+robert.wallis");
+        gitRunner.setUserEmail("grumpy.cat+robert.wallis", false);
         pairController.init();
 
         // WHEN a team member is toggled off
@@ -243,7 +243,7 @@ public class PairControllerTest extends TestCase {
     public void testToggleTeamMemberOn() throws Exception {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
-        gitRunner.setUserEmail("robert.wallis");
+        gitRunner.setUserEmail("robert.wallis", false);
         pairController.init();
 
         // WHEN a team member is toggled on
@@ -258,7 +258,7 @@ public class PairControllerTest extends TestCase {
         PairController pairController = new PairController(pairConfig, gitRunner);
 
         // AND an invalid email
-        gitRunner.setUserEmail("not.valid");
+        gitRunner.setUserEmail("not.valid", false);
         pairController.init();
 
         // WHEN the display name is fetched
@@ -269,7 +269,7 @@ public class PairControllerTest extends TestCase {
     public void testIsPaired() throws Exception {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
-        gitRunner.setUserEmail("robert.wallis");
+        gitRunner.setUserEmail("robert.wallis", false);
         pairController.init();
 
         // WHEN a team member is toggled on

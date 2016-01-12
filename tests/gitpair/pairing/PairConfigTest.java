@@ -26,7 +26,7 @@ public class PairConfigTest extends TestCase {
             "  prefix: prefix\n" +
             "  domain: smilingrob.com\n" +
             "\n" +
-            "global: true\n";
+            "global: false\n";
 
     public void testFindAllTeamMembers() throws Exception {
         // GIVEN a configuration
@@ -100,6 +100,41 @@ public class PairConfigTest extends TestCase {
         assertEquals("Robert A. Wallis", teamMember.getName());
         assertEquals("robert.wallis", teamMember.getEmail());
         assertEquals("rw", teamMember.getInitials());
+    }
+
+    public void testGlobalTrue() throws Exception {
+        {
+            // GIVEN a valid configuration
+            PairConfig globalConfig = new PairConfig("global:true");
+
+            // THEN global should be true
+            assertTrue(globalConfig.shouldChangeGlobalUser());
+        }
+        {
+            // GIVEN a valid configuration
+            PairConfig globalConfig = new PairConfig("global:True");
+
+            // THEN global should be true
+            assertTrue(globalConfig.shouldChangeGlobalUser());
+        }
+    }
+
+    public void testGlobalFalse() throws Exception {
+        {
+            // GIVEN a valid configuration
+            PairConfig globalConfig = new PairConfig("global:");
+
+            // THEN global should be false (unset)
+            assertFalse(globalConfig.shouldChangeGlobalUser());
+        }
+
+        {
+            // GIVEN a valid configuration
+            PairConfig noGlobalConfig = new PairConfig("");
+
+            // THEN global should be false (unset)
+            assertFalse(noGlobalConfig.shouldChangeGlobalUser());
+        }
     }
 
 }

@@ -14,6 +14,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -53,8 +55,14 @@ public class GitRunner {
      *
      * @param fullEmail the current email of the user, for example "example@example.com".
      */
-    public void setUserEmail(@NotNull String fullEmail) {
-        runGitCommand("config", "user.email", fullEmail);
+    public void setUserEmail(@NotNull String fullEmail, boolean global) {
+        if (global) {
+            runGitCommand("config", "--global", "user.email", fullEmail);
+            // clear the local config, so it won't override our new setting
+            runGitCommand("config", "--unset", "--local", "user.email");
+        } else {
+            runGitCommand("config", "user.email", fullEmail);
+        }
     }
 
     /**
@@ -130,6 +138,18 @@ public class GitRunner {
      */
     @Nullable
     String runGitCommand(String... parameters) {
+        return runGitCommand(Arrays.asList(parameters));
+    }
+
+    /**
+     * Run a git command.  Finds git, and then runs the parameters.
+     * For example, parameters "config", "user.email" will run `git config user.email`.
+     *
+     * @param parameters List of parameters after `git` to run.
+     * @return output of the git command.
+     */
+    @Nullable
+    String runGitCommand(List<String> parameters) {
         String gitPath = findGitExePath();
         if (StringUtil.isEmpty(gitPath)) {
             // git will fail, because we can't find it, so we exit early

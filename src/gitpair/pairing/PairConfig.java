@@ -20,6 +20,7 @@ public class PairConfig {
     private String prefix;
     private String domain;
     private List<TeamMember> teamMembers = new ArrayList<TeamMember>();
+    private boolean shouldChangeGlobalUser;
 
     /**
      * Initialize the pair configuration.
@@ -107,6 +108,12 @@ public class PairConfig {
                     }
                 }
             }
+            Node global = root.get("global");
+            if (global != null && global.getValue() != null) {
+                if ("true".equals(global.getValue().toLowerCase())) {
+                    shouldChangeGlobalUser = true;
+                }
+            }
         }
     }
 
@@ -143,5 +150,14 @@ public class PairConfig {
 
     public String getDomain() {
         return domain;
+    }
+
+    /**
+     * Should git use the --global flag when changing which user is logged in.
+     *
+     * @return true if git should change the global user.
+     */
+    public boolean shouldChangeGlobalUser() {
+        return shouldChangeGlobalUser;
     }
 }

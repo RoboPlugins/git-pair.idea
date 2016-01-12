@@ -71,8 +71,8 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
             System.out.println("Git Pair plugin couldn't open " + configFile + ": " + e.getMessage());
             return false;
         }
-        GitRunner gitRunner = new GitRunner(projectPath);
         PairConfig pairConfig = new PairConfig(configYaml);
+        GitRunner gitRunner = new GitRunner(projectPath);
         pairController = new PairController(pairConfig, gitRunner);
         pairController.init();
         updateWidgetView();
