@@ -9,6 +9,28 @@ On my teams we often ask "Wait, who's paired right now?"  It's a bit inconvienie
 ![Choose a pair](docs/screen-shot-gc.png)
 ![Choose a different pair](docs/screen-shot-pp.png)
 
+# Installation
+
+Add a `.pairs` file to your project's root folder in this format:
+
+```
+# This is for the awesome git pair https://plugins.jetbrains.com/plugin/8135 plugin.
+# But it works with the Pivotal Labs `git pair` plugin too.
+
+pairs:
+  gc: Grumpy Cat;grumpy.cat
+  pp: Pinkie Pie; pinkie.pie
+  rw: Robert A. Wallis; robert.wallis
+
+email:
+  prefix:
+  domain: example.com
+
+global: true
+```
+
+# FAQ
+
 ### Why not just use the command line?
 
 Because the current `git pair` is not visible on the screen at a glance.  And typing `git pair` will reset your pair to nothing.

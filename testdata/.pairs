@@ -1,4 +1,5 @@
-# This is a comment.
+# This is for the awesome git pair https://plugins.jetbrains.com/plugin/8135 plugin.
+# But it works with the Pivotal Labs `git pair` plugin too.
 
 pairs:
   gc: Grumpy Cat;grumpy.cat
@@ -7,6 +8,6 @@ pairs:
 
 email:
   prefix:
-  domain: smilingrob.com
+  domain: example.com
 
 global: true
