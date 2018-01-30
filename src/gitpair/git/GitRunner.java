@@ -85,8 +85,14 @@ public class GitRunner {
      *
      * @param fullName the current name of the user, for example "Bub".
      */
-    public void setUserName(@NotNull String fullName) {
-        runGitCommand("config", "user.name", fullName);
+    public void setUserName(@NotNull String fullName, boolean global) {
+        if (global) {
+            runGitCommand("config", "--global", "user.name", fullName);
+            // clear the local config, so it won't override our new setting
+            runGitCommand("config", "--unset", "--local", "user.name");
+        } else {
+            runGitCommand("config", "user.name", fullName);
+        }
     }
 
     /**
