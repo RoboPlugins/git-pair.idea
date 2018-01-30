@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
+
 package gitpair.pairing;
 
 /**

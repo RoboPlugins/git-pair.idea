@@ -1,3 +1,7 @@
+/*
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
+ */
+
 package gitpair.git;
 
 public class GitConfigSettings {

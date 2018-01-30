@@ -1,3 +1,7 @@
 <component name="CopyrightManager">
-  <settings default="" />
+  <settings default="Robert A. Wallis">
+    <module2copyright>
+      <element module="Java" copyright="Robert A. Wallis" />
+    </module2copyright>
+  </settings>
 </component>
