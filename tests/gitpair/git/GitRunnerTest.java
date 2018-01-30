@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
 
 package gitpair.git;
@@ -11,40 +11,21 @@ import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCa
  */
 public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
-    private String oldGlobalEmail;
-    private String oldGlobalName;
+    private GitConfigSettings gitConfigSettings = new GitConfigSettings();
 
     @Override
     public void setUp() throws Exception {
+        gitConfigSettings.save();
         super.setUp();
-        GitRunner gitRunner = new GitRunner(".");
-        String globalName = gitRunner.runGitCommand("config", "--global", "user.name");
-        if (globalName != null) {
-            oldGlobalName = globalName.trim();
-        }
-        String globalEmail = gitRunner.runGitCommand("config", "--global", "user.email");
-        if (globalEmail != null) {
-            oldGlobalEmail = globalEmail.trim();
-        }
     }
 
     @Override
     public void tearDown() throws Exception {
+        gitConfigSettings.restore();
         super.tearDown();
-        GitRunner gitRunner = new GitRunner(".");
-        if (oldGlobalName != null) {
-            gitRunner.runGitCommand("config", "--global", "user.name", oldGlobalName);
-        } else {
-            gitRunner.runGitCommand("config", "--unset", "--global", "user.name");
-        }
-        if (oldGlobalEmail != null) {
-            gitRunner.runGitCommand("config", "--global", "user.email", oldGlobalEmail);
-        } else {
-            gitRunner.runGitCommand("config", "--unset", "--global", "user.email");
-        }
     }
 
-    public void testGetUserEmail() throws Exception {
+    public void testGetUserEmail() {
         // GIVEN a system with git installed and a project configured with git
         GitRunner gitRunner = new GitRunner(getProject().getBasePath());
         gitRunner.runGitCommand("init");
@@ -57,7 +38,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("setup@example.com", configuredEmail);
     }
 
-    public void testSetUserEmail() throws Exception {
+    public void testSetUserEmail() {
         // GIVEN a system with git installed and a project configured with git
         GitRunner gitRunner = new GitRunner(getProject().getBasePath());
         gitRunner.runGitCommand("init");
@@ -70,7 +51,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("testSetUserEmail@example.com", gitRunner.getUserEmail());
     }
 
-    public void testSetUserEmailGlobal() throws Exception {
+    public void testSetUserEmailGlobal() {
         // GIVEN a system with git installed and a project configured with git
         GitRunner gitRunner = new GitRunner(getProject().getBasePath());
         gitRunner.runGitCommand("init");
@@ -83,7 +64,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("testSetUserEmail@example.com", gitRunner.getUserEmail());
     }
 
-    public void testGetUserName() throws Exception {
+    public void testGetUserName() {
         // GIVEN a system with git installed and a project configured with git
         GitRunner gitRunner = new GitRunner(getProject().getBasePath());
         gitRunner.runGitCommand("init");
@@ -96,7 +77,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         assertEquals("TestUserName", configuredName);
     }
 
-    public void testSetUserName() throws Exception {
+    public void testSetUserName() {
         // GIVEN a system with git installed and a project configured with git
         GitRunner gitRunner = new GitRunner(getProject().getBasePath());
         gitRunner.runGitCommand("init");

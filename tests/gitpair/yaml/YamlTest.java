@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
 
 package gitpair.yaml;
@@ -11,7 +11,7 @@ import junit.framework.TestCase;
  */
 public class YamlTest extends TestCase {
 
-    static final String YAML_SOURCE = "# This is a comment.\n" +
+    private static final String YAML_SOURCE = "# This is a comment.\n" +
             "\n" +
             "pairs:\n" +
             "  gc: Grumpy Cat;grumpy.cat\n" +
@@ -28,11 +28,11 @@ public class YamlTest extends TestCase {
             "\n" +
             "email:\n" +
             "  prefix:\n" +
-            "  domain: smilingrob.com\n" +
+            "  domain: example.com\n" +
             "\n" +
             "global: true\n";
 
-    public void testParseRoot() throws Exception {
+    public void testParseRoot() {
 
         // GIVEN a test YAML file
         // WHEN we parse it
@@ -46,7 +46,7 @@ public class YamlTest extends TestCase {
         assertTrue(root.containsKey("global"));
     }
 
-    public void testParseLevel1() throws Exception {
+    public void testParseLevel1() {
 
         // GIVEN a test YAML file
         // WHEN we parse it
@@ -56,13 +56,13 @@ public class YamlTest extends TestCase {
         Node pairs = root.get("pairs");
         assertNotNull(pairs);
 
-        // AND pairs should contain sublevel data
+        // AND pairs should contain sub-level data
         assertTrue(pairs.containsKey("gc"));
         assertTrue(pairs.containsKey("pp"));
         assertTrue(pairs.containsKey("rw"));
     }
 
-    public void testParseLevel1Data() throws Exception {
+    public void testParseLevel1Data() {
 
         // GIVEN a test YAML file
         // WHEN we parse it
@@ -78,7 +78,7 @@ public class YamlTest extends TestCase {
         assertEquals("Robert A. Wallis; robert.wallis", pairs.get("rw").getValue());
     }
 
-    public void testParseMultiDepths() throws Exception {
+    public void testParseMultiDepths() {
 
         // GIVEN a test YAML file
         // WHEN we parse it
@@ -92,7 +92,7 @@ public class YamlTest extends TestCase {
         assertNotNull(d0.get("d1").get("d2").get("d3"));
     }
 
-    public void testParseKeyCollision() throws Exception {
+    public void testParseKeyCollision() {
 
         // GIVEN a test YAML file
         // WHEN we parse it
@@ -108,7 +108,7 @@ public class YamlTest extends TestCase {
         assertEquals("second d2", d1.getChildren().get(1).getValue());
     }
 
-    public void testParseInterspersedValues() throws Exception {
+    public void testParseInterspersedValues() {
 
         // GIVEN a test YAML file
         // WHEN we parse it
@@ -121,7 +121,7 @@ public class YamlTest extends TestCase {
     }
 
 
-    public void testDepth() throws Exception {
+    public void testDepth() {
         assertEquals(0, Yaml.depth("a:"));
         assertEquals(1, Yaml.depth(" a:"));
         assertEquals(2, Yaml.depth("  a:"));

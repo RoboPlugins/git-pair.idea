@@ -4,7 +4,7 @@ Pair programming plugin for the Idea platform ([IntelliJ](https://www.jetbrains.
 
 Like [Pivotal Lab's Git Scripts](https://github.com/pivotal/git_scripts), but for the best IDE ever built.
 
-On my teams we often ask "Wait, who's paired right now?"  It's a bit inconvienient to find that information.  This plugin shows on screen who is paired, and allows you to change the pair.  Modeled after the git4idea plugin which allows you to see the branch you are on and quickly switch branches.
+On my teams we often ask "Wait, who's paired right now?"  It's a bit inconvenient to find that information.  This plugin shows on screen who is paired, and allows you to change the pair.  Modeled after the git4idea plugin which allows you to see the branch you are on and quickly switch branches.
 
 ![Choose a pair](docs/screen-shot-gc.png)
 ![Choose a different pair](docs/screen-shot-pp.png)

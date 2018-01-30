@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
+
 package gitpair.git;
 
 import com.intellij.execution.ExecutionException;
@@ -80,9 +81,9 @@ public class GitRunner {
     }
 
     /**
-     * Run `git config user.name Bubba` and return the current configured user.
+     * Run `git config user.name Bub` and return the current configured user.
      *
-     * @param fullName the current name of the user, for example "Bubba".
+     * @param fullName the current name of the user, for example "Bub".
      */
     public void setUserName(@NotNull String fullName) {
         runGitCommand("config", "user.name", fullName);
@@ -149,7 +150,7 @@ public class GitRunner {
      * @return output of the git command.
      */
     @Nullable
-    String runGitCommand(List<String> parameters) {
+    private String runGitCommand(List<String> parameters) {
         String gitPath = findGitExePath();
         if (StringUtil.isEmpty(gitPath)) {
             // git will fail, because we can't find it, so we exit early
@@ -183,7 +184,10 @@ public class GitRunner {
         String output = processOutput.getStdout();
 
         if (processOutput.getExitCode() != 0) {
-            System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + processOutput.getStderr());
+            String err = processOutput.getStderr();
+            if (err.length() > 0) {
+                System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + processOutput.getStderr());
+            }
             return null;
         }
 

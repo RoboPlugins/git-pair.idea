@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
+
 package gitpair.ui;
 
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -22,7 +23,7 @@ public class TeamMemberAction extends ToggleAction {
      *
      * @param teamMember model representing a team member.
      */
-    public TeamMemberAction(@NotNull TeamMember teamMember, @NotNull TeamMemberActionPerformer actionPerformer) {
+    TeamMemberAction(@NotNull TeamMember teamMember, @NotNull TeamMemberActionPerformer actionPerformer) {
         super(teamMember.getName());
         this.teamMember = teamMember;
         this.teamMemberActionPerformer = actionPerformer;

@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
+
 package gitpair.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
@@ -18,9 +19,9 @@ import java.util.List;
  */
 public class PairController {
 
-    PairConfig pairConfig;
-    GitRunner gitRunner;
-    ArrayList<TeamMember> currentPair;
+    private PairConfig pairConfig;
+    private GitRunner gitRunner;
+    private ArrayList<TeamMember> currentPair;
 
     /**
      * Logic for pairing.
@@ -48,21 +49,16 @@ public class PairController {
      * Add or remove a team member.
      *
      * @param teamMember team member to turn on or off.
-     * @return true if paired.
      */
-    public boolean toggleTeamMember(TeamMember teamMember) {
+    public void toggleTeamMember(TeamMember teamMember) {
         if (teamMember == null || StringUtil.isEmpty(teamMember.getEmail())) {
-            return false;
+            return;
         }
-
-        boolean paired;
 
         if (currentPair.contains(teamMember)) {
             currentPair.remove(teamMember);
-            paired = false;
         } else {
             currentPair.add(teamMember);
-            paired = true;
         }
 
         String email = generatePairEmail(currentPair);
@@ -74,8 +70,6 @@ public class PairController {
         if (email != null) {
             gitRunner.setUserEmail(email, pairConfig.shouldChangeGlobalUser());
         }
-
-        return paired;
     }
 
     /**
@@ -113,7 +107,7 @@ public class PairController {
      * @return list of currently paired members.
      */
     @Nullable
-    List<TeamMember> findWhoIsPaired() {
+    private List<TeamMember> findWhoIsPaired() {
         // ask git who is paired, instead of relying on an internal state
         String userEmail = gitRunner.getUserEmail();
         return matchTeamMembersFromEmail(userEmail);

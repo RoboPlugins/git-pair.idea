@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
+
 package gitpair.ui;
 
 import com.intellij.openapi.application.ApplicationManager;
@@ -60,18 +61,18 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         }
 
         String configFile = projectPath.concat("/.pairs");
-        String configYaml = "";
+        StringBuilder configYaml = new StringBuilder();
         try {
             BufferedReader br = new BufferedReader(new FileReader(configFile));
             String line;
             while ((line = br.readLine()) != null) {
-                configYaml += line + "\n";
+                configYaml.append(line).append("\n");
             }
         } catch (IOException e) {
             System.out.println("Git Pair plugin couldn't open " + configFile + ": " + e.getMessage());
             return false;
         }
-        PairConfig pairConfig = new PairConfig(configYaml);
+        PairConfig pairConfig = new PairConfig(configYaml.toString());
         GitRunner gitRunner = new GitRunner(projectPath);
         pairController = new PairController(pairConfig, gitRunner);
         pairController.init();
@@ -88,7 +89,7 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
     @Override
     @Nullable
     public ListPopup getPopupStep() {
-        updateState(); // make sure we have the latest info that chould have changed in the background
+        updateState(); // make sure we have the latest info that should have changed in the background
         return PairsPopupList.createPairsPopup(myProject, pairController, this);
     }
 

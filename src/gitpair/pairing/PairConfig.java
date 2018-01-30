@@ -1,6 +1,7 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved.
  */
+
 package gitpair.pairing;
 
 import com.intellij.openapi.util.text.StringUtil;
@@ -34,12 +35,12 @@ public class PairConfig {
     /**
      * Initialize the pair configuration.
      *
-     * @param prefix email prefix, useful for Gmail
+     * @param prefix email prefix, useful for GMail
      *               ex. If "team@example.com" is a team alias, then "team" should be the prefix.
-     *               Because "team+robert.wallis+grumpy.cat@example.com" handled by Gmail will send mail to team@example.com.
+     *               Because "team+robert.wallis+grumpy.cat@example.com" handled by GMail will send mail to team@example.com.
      * @param domain everything after the '@' sign in the email address.
      */
-    public PairConfig(@Nullable String prefix, @NotNull String domain) {
+    PairConfig(@Nullable String prefix, @NotNull String domain) {
         this.prefix = prefix;
         this.domain = domain;
     }
@@ -120,7 +121,7 @@ public class PairConfig {
     /**
      * Find the team member by initials and return it.
      *
-     * @param initials initals to look up.
+     * @param initials initials to look up.
      * @return the team member or null if there was an error.
      */
     public TeamMember getTeamMemberByInitials(String initials) {
