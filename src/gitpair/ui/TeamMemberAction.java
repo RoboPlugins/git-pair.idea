@@ -23,7 +23,7 @@ public class TeamMemberAction extends ToggleAction {
      *
      * @param teamMember model representing a team member.
      */
-    public TeamMemberAction(@NotNull TeamMember teamMember, @NotNull TeamMemberActionPerformer actionPerformer) {
+    TeamMemberAction(@NotNull TeamMember teamMember, @NotNull TeamMemberActionPerformer actionPerformer) {
         super(teamMember.getName());
         this.teamMember = teamMember;
         this.teamMemberActionPerformer = actionPerformer;

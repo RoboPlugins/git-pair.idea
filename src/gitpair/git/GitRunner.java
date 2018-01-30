@@ -81,9 +81,9 @@ public class GitRunner {
     }
 
     /**
-     * Run `git config user.name Bubba` and return the current configured user.
+     * Run `git config user.name Bub` and return the current configured user.
      *
-     * @param fullName the current name of the user, for example "Bubba".
+     * @param fullName the current name of the user, for example "Bub".
      */
     public void setUserName(@NotNull String fullName) {
         runGitCommand("config", "user.name", fullName);
@@ -150,7 +150,7 @@ public class GitRunner {
      * @return output of the git command.
      */
     @Nullable
-    String runGitCommand(List<String> parameters) {
+    private String runGitCommand(List<String> parameters) {
         String gitPath = findGitExePath();
         if (StringUtil.isEmpty(gitPath)) {
             // git will fail, because we can't find it, so we exit early
