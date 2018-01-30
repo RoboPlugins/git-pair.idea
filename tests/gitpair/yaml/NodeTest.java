@@ -11,7 +11,7 @@ import junit.framework.TestCase;
  */
 public class NodeTest extends TestCase {
 
-    public void testGet() throws Exception {
+    public void testGet() {
         // GIVEN a node graph
         Node node = new Node(null);
 
@@ -23,7 +23,7 @@ public class NodeTest extends TestCase {
         assertEquals(child, node.get("test"));
     }
 
-    public void testSize() throws Exception {
+    public void testSize() {
         // GIVEN a node graph
         Node node = new Node(null);
         node.addChild(new Node("test"));
@@ -35,7 +35,7 @@ public class NodeTest extends TestCase {
         assertEquals(3, node.size());
     }
 
-    public void testAppendValue() throws Exception {
+    public void testAppendValue() {
         // GIVEN a node
         Node node = new Node(null);
 
@@ -53,7 +53,7 @@ public class NodeTest extends TestCase {
         assertEquals("value 3", node.getValue());
     }
 
-    public void testContainsKey() throws Exception {
+    public void testContainsKey() {
         // GIVEN a node graph
         Node node = new Node(null);
 
@@ -72,7 +72,7 @@ public class NodeTest extends TestCase {
         // THEN we can get it by it's new name
     }
 
-    public void testRenameChild() throws Exception {
+    public void testRenameChild() {
         // GIVEN a node graph
         Node node = new Node(null);
 

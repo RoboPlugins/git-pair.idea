@@ -183,7 +183,10 @@ public class GitRunner {
         String output = processOutput.getStdout();
 
         if (processOutput.getExitCode() != 0) {
-            System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + processOutput.getStderr());
+            String err = processOutput.getStderr();
+            if (err.length() > 0) {
+                System.out.println(TAG + " " + gitConfigCommand.toString() + " caused Git error: " + processOutput.getStderr());
+            }
             return null;
         }
 

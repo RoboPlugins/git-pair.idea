@@ -24,11 +24,11 @@ public class PairConfigTest extends TestCase {
             "\n" +
             "email:\n" +
             "  prefix: prefix\n" +
-            "  domain: smilingrob.com\n" +
+            "  domain: example.com\n" +
             "\n" +
             "global: false\n";
 
-    public void testFindAllTeamMembers() throws Exception {
+    public void testFindAllTeamMembers() {
         // GIVEN a configuration
         PairConfig pairConfig = new PairConfig(YAML_SOURCE);
 
@@ -55,7 +55,7 @@ public class PairConfigTest extends TestCase {
         assertEquals("rw", teamMembers.get(2).getInitials());
     }
 
-    public void testTeamMemberFromYamlPairChildNode() throws Exception {
+    public void testTeamMemberFromYamlPairChildNode() {
         // GIVEN a team node
         Node config = Yaml.parse(YAML_SOURCE);
         Node teamMemberNode = config.get("pairs").get("rw");
@@ -89,7 +89,7 @@ public class PairConfigTest extends TestCase {
         assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
     }
 
-    public void testGetTeamMemberByInitials() throws Exception {
+    public void testGetTeamMemberByInitials() {
         // GIVEN a valid configuration
         PairConfig pairConfig = new PairConfig(YAML_SOURCE);
 
@@ -102,7 +102,7 @@ public class PairConfigTest extends TestCase {
         assertEquals("rw", teamMember.getInitials());
     }
 
-    public void testGlobalTrue() throws Exception {
+    public void testGlobalTrue() {
         {
             // GIVEN a valid configuration
             PairConfig globalConfig = new PairConfig("global:true");
@@ -119,7 +119,7 @@ public class PairConfigTest extends TestCase {
         }
     }
 
-    public void testGlobalFalse() throws Exception {
+    public void testGlobalFalse() {
         {
             // GIVEN a valid configuration
             PairConfig globalConfig = new PairConfig("global:");

@@ -4,6 +4,7 @@
 
 package gitpair.pairing;
 
+import gitpair.git.GitConfigSettings;
 import gitpair.git.GitRunner;
 import junit.framework.TestCase;
 
@@ -15,10 +16,23 @@ import java.util.List;
  */
 public class PairControllerTest extends TestCase {
 
-    PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
-    GitRunner gitRunner = new GitRunner(".");
+    private PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
+    private GitRunner gitRunner = new GitRunner(".");
+    private GitConfigSettings gitConfigSettings = new GitConfigSettings();
+    
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        gitConfigSettings.save();
+    }
 
-    public void testGeneratePairName() throws Exception {
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+        gitConfigSettings.restore();
+    }
+
+    public void testGeneratePairName() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -47,7 +61,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat & Robert A. Wallis", pairNameReversed);
     }
 
-    public void testGeneratePairNameSolo() throws Exception {
+    public void testGeneratePairNameSolo() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -63,7 +77,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Robert A. Wallis", pairName);
     }
 
-    public void testGeneratePairNameTrio() throws Exception {
+    public void testGeneratePairNameTrio() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -80,7 +94,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat, Pinkie Pie, and Robert A. Wallis", pairName);
     }
 
-    public void testGeneratePairNameBadData() throws Exception {
+    public void testGeneratePairNameBadData() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -96,7 +110,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat & Robert A. Wallis", pairController.generatePairName(list));
     }
 
-    public void testGeneratePairEmail() throws Exception {
+    public void testGeneratePairEmail() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -109,7 +123,7 @@ public class PairControllerTest extends TestCase {
         String pairName = pairController.generatePairEmail(list);
 
         // THEN it should be formatted correctly
-        assertEquals("prefix+grumpy.cat+robert.wallis@smilingrob.com", pairName);
+        assertEquals("prefix+grumpy.cat+robert.wallis@example.com", pairName);
 
         // GIVEN a reversed list
         ArrayList<TeamMember> reversedList = new ArrayList<TeamMember>();
@@ -120,10 +134,10 @@ public class PairControllerTest extends TestCase {
         String pairNameReversed = pairController.generatePairEmail(reversedList);
 
         // THEN it should STILL be formatted alphabetically
-        assertEquals("prefix+grumpy.cat+robert.wallis@smilingrob.com", pairNameReversed);
+        assertEquals("prefix+grumpy.cat+robert.wallis@example.com", pairNameReversed);
     }
 
-    public void testGeneratePairEmailSolo() throws Exception {
+    public void testGeneratePairEmailSolo() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -135,12 +149,12 @@ public class PairControllerTest extends TestCase {
         String pairName = pairController.generatePairEmail(list);
 
         // THEN it should be formatted correctly
-        assertEquals("prefix+robert.wallis@smilingrob.com", pairName);
+        assertEquals("prefix+robert.wallis@example.com", pairName);
     }
 
-    public void testGeneratePairEmailNoPrefix() throws Exception {
+    public void testGeneratePairEmailNoPrefix() {
         // GIVEN a configuration
-        PairConfig noPrefixConfig = new PairConfig(null, "smilingrob.com");
+        PairConfig noPrefixConfig = new PairConfig(null, "example.com");
         PairController pairController = new PairController(noPrefixConfig, gitRunner);
 
         // AND some members
@@ -151,10 +165,10 @@ public class PairControllerTest extends TestCase {
         String pairName = pairController.generatePairEmail(list);
 
         // THEN it should be formatted correctly
-        assertEquals("robert.wallis@smilingrob.com", pairName);
+        assertEquals("robert.wallis@example.com", pairName);
     }
 
-    public void testGeneratePairEmailTrio() throws Exception {
+    public void testGeneratePairEmailTrio() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -168,10 +182,10 @@ public class PairControllerTest extends TestCase {
         String pairName = pairController.generatePairEmail(list);
 
         // THEN it should be formatted correctly
-        assertEquals("prefix+grumpy.cat+pinkie.pie+robert.wallis@smilingrob.com", pairName);
+        assertEquals("prefix+grumpy.cat+pinkie.pie+robert.wallis@example.com", pairName);
     }
 
-    public void testGeneratePairEmailBadData() throws Exception {
+    public void testGeneratePairEmailBadData() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -184,13 +198,13 @@ public class PairControllerTest extends TestCase {
 
         // WHEN a pair email is generated
         // THEN it shouldn't crash
-        assertEquals("prefix+robert.wallis+grumpy.cat@smilingrob.com", pairController.generatePairEmail(list));
+        assertEquals("prefix+robert.wallis+grumpy.cat@example.com", pairController.generatePairEmail(list));
     }
 
-    public void testPairMatcher() throws Exception {
+    public void testPairMatcher() {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
-        String email = "prefix+grumpy.cat+robert.wallis@smilingrob.com";
+        String email = "prefix+grumpy.cat+robert.wallis@example.com";
 
         // WHEN we get the members that match the email
         List<TeamMember> team = pairController.matchTeamMembersFromEmail(email);
@@ -202,7 +216,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Robert A. Wallis", team.get(1).getName());
     }
 
-    public void testPairMatcherBadData() throws Exception {
+    public void testPairMatcherBadData() {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -227,7 +241,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat", team1.get(0).getName());
     }
 
-    public void testToggleTeamMemberOff() throws Exception {
+    public void testToggleTeamMemberOff() {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
         gitRunner.setUserEmail("grumpy.cat+robert.wallis", false);
@@ -240,7 +254,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Robert A. Wallis", pairController.getPairDisplayName());
     }
 
-    public void testToggleTeamMemberOn() throws Exception {
+    public void testToggleTeamMemberOn() {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
         gitRunner.setUserEmail("robert.wallis", false);
@@ -253,7 +267,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("Grumpy Cat & Robert A. Wallis", pairController.getPairDisplayName());
     }
 
-    public void testNoTeamMemberTitle() throws Exception {
+    public void testNoTeamMemberTitle() {
         // GIVEN a valid configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
 
@@ -266,7 +280,7 @@ public class PairControllerTest extends TestCase {
         assertEquals("git pair", pairController.getPairDisplayName());
     }
 
-    public void testIsPaired() throws Exception {
+    public void testIsPaired() {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
         gitRunner.setUserEmail("robert.wallis", false);
