@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+ * Copyright (C) 2018 Robert A. Wallis, All Rights Reserved
  */
 
 package gitpair.pairing;
@@ -19,7 +19,7 @@ public class PairControllerTest extends TestCase {
     private PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
     private GitRunner gitRunner = new GitRunner(".");
     private GitConfigSettings gitConfigSettings = new GitConfigSettings();
-    
+
     @Override
     public void setUp() throws Exception {
         super.setUp();
