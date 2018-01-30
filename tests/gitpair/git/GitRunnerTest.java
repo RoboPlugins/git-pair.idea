@@ -84,9 +84,22 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
         gitRunner.runGitCommand("config", "user.name", "setup");
 
         // WHEN we run `git config user.name "Test User Name & Stuff"`
-        gitRunner.setUserName("Test User Name & Stuff");
+        gitRunner.setUserName("Test User Name & Stuff", false);
 
         // THEN it should set current user's name
         assertEquals("Test User Name & Stuff", gitRunner.getUserName());
+    }
+
+    public void testSetUserNameGlobal() {
+        // GIVEN a system with git installed and a project configured with git
+        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        gitRunner.runGitCommand("init");
+        gitRunner.runGitCommand("config", "user.name", "setup");
+
+        // WHEN we run `git config user.name "Test User Name & Stuff"`
+        gitRunner.setUserName("Test Global User Name", true);
+
+        // THEN it should set current user's name
+        assertEquals("Test Global User Name", gitRunner.getUserName());
     }
 }

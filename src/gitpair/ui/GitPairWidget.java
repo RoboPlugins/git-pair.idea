@@ -24,6 +24,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.awt.event.MouseEvent;
 import java.io.BufferedReader;
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 
@@ -54,25 +55,18 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
         if (project == null) {
             return false;
         }
-
         String projectPath = project.getBasePath();
         if (projectPath == null) {
             return false;
         }
+        String projectPairs = projectPath.concat("/.pairs");
+        String userHome = System.getProperty("user.home");
+        String homePairs = userHome.concat("/.pairs");
 
-        String configFile = projectPath.concat("/.pairs");
-        StringBuilder configYaml = new StringBuilder();
-        try {
-            BufferedReader br = new BufferedReader(new FileReader(configFile));
-            String line;
-            while ((line = br.readLine()) != null) {
-                configYaml.append(line).append("\n");
-            }
-        } catch (IOException e) {
-            System.out.println("Git Pair plugin couldn't open " + configFile + ": " + e.getMessage());
+        String configYaml = getPairsFile(projectPairs, homePairs);
+        if (configYaml == null)
             return false;
-        }
-        PairConfig pairConfig = new PairConfig(configYaml.toString());
+        PairConfig pairConfig = new PairConfig(configYaml);
         GitRunner gitRunner = new GitRunner(projectPath);
         pairController = new PairController(pairConfig, gitRunner);
         pairController.init();
@@ -80,6 +74,26 @@ public class GitPairWidget extends EditorBasedWidget implements StatusBarWidget.
 
         return true;
     }
+
+    private String getPairsFile(String... paths) {
+        for (String configFile : paths) {
+            StringBuilder configYaml = new StringBuilder();
+            try {
+                BufferedReader br = new BufferedReader(new FileReader(configFile));
+                String line;
+                while ((line = br.readLine()) != null) {
+                    configYaml.append(line).append("\n");
+                }
+                return configYaml.toString();
+            } catch (FileNotFoundException ignored) {
+            } catch (IOException e) {
+                System.out.println("Git Pair plugin couldn't open " + configFile + ": " + e.getMessage());
+            }
+
+        }
+        return null;
+    }
+
 
     @Override
     public StatusBarWidget copy() {
