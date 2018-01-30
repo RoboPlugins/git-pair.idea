@@ -1,10 +1,10 @@
 <!--
-  ~ Copyright (C) 2016 Robert A. Wallis, All Rights Reserved
+  ~ Copyright (C) 2018 Robert A. Wallis, All Rights Reserved
   -->
-<idea-plugin version="2">
+<idea-plugin>
     <id>com.smilingrob.gitpair</id>
     <name>Git Pair</name>
-    <version>1.3</version>
+    <version>1.4</version>
     <vendor email="smilingrob@gmail.com" url="http://smilingrob.com">Robert Wallis</vendor>
 
     <description><![CDATA[
@@ -12,7 +12,7 @@
     See who is paired, and pick your teammates in the status bar.
     Changes the name and email address of your local git user so when you commit you commit as all of the checked people.
     <br />
-    <img src="https://github.com/robert-wallis/git-pair.idea/raw/master/docs/screen-shot-gc.png" alt="screenshot" />
+    <img src="https://github.com/RoboPlugins/git-pair.idea/raw/master/docs/screen-shot-gc.png" alt="screenshot" />
     <br />
     <ul>
         <li>Does not depend on or use the git pair plugin, just uses git.</li>
@@ -20,11 +20,12 @@
         <li>Alphabetically sorts, deterministic paired emails.</li>
         <li>Supports email prefix so pair mail can go to a Google Apps alias, prefix+rob+grumpy@example.com (means prefix@example.com on Google).</li>
     </ul>
-    <a href="https://github.com/robert-wallis/git-pair.idea">Source code</a> available on GitHub.
+    <a href="https://github.com/RoboPlugins/git-pair.idea">Source code</a> available on GitHub.
     ]]></description>
 
     <change-notes><![CDATA[
     <ul>
+      <li>v1.4 - Checking <code>$PROJECT/.pairs</code> and then <code>$HOME/.pairs</code>, <code>$HOME</code> is new.
       <li>v1.3 - Respect's <code>global</code> setting, if <code>true</code> then the git name/email for the logged in user will be set (global).</li>
       <li>v1.2 - Fixing missing Files and Path class in JRE 1.6.</li>
       <li>v1.1 - Going back down to JRE 1.6 instead of 1.7 because my pairing station at work doesn't have a reasonable JRE on it.</li>
