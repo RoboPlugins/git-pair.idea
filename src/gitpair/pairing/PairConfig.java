@@ -68,23 +68,52 @@ public class PairConfig {
         }
 
         String[] values = value.split(";");
-        if (values.length < 2) {
+        if (values.length == 0) {
             return null;
         }
 
         String name = values[0].trim();
-        String email = values[1].trim();
-        if (StringUtil.isEmpty(name) || StringUtil.isEmpty(email)) {
+        if (StringUtil.isEmpty(name)) {
             return null;
+        }
+
+        String email = null;
+        if (values.length > 1) {
+            email = values[1].trim();
         }
 
         return new TeamMember(initials, name, email);
     }
 
-    static TeamMember updateTeamMemberEmail(TeamMember person, Node email_addresses)
-    {
-        //return person;
-        return null;
+    /**
+     * Looks up the person in the email_addresses node by initials,
+     * and assigns the value of the node to the person's email.
+     *
+     * @param person         a person previously parsed from the "pairs" node
+     * @param emailAddresses the "email_addresses" root node
+     */
+    static void updateTeamMemberEmail(TeamMember person, Node emailAddresses) {
+        if (person == null || emailAddresses == null) {
+            return;
+        }
+        String initials = person.getInitials();
+        if (StringUtil.isEmpty(initials)) {
+            return;
+        }
+        Node emailNode = emailAddresses.get(person.getInitials());
+        if (emailNode == null) {
+            // email not found
+            return;
+        }
+        String email = emailNode.getValue();
+        if (email == null) {
+            return;
+        }
+        email = email.trim();
+        if (StringUtil.isEmpty(email)) {
+            return;
+        }
+        person.setEmail(email);
     }
 
     /**
@@ -112,6 +141,12 @@ public class PairConfig {
                     TeamMember teamMember = teamMemberFromYamlPairChildNode(pairNode);
                     if (teamMember != null) {
                         teamMembers.add(teamMember);
+                    }
+                }
+                Node email_addresses = root.get("email_addresses");
+                if (email_addresses != null) {
+                    for (TeamMember person : teamMembers) {
+                        updateTeamMemberEmail(person, email_addresses);
                     }
                 }
             }

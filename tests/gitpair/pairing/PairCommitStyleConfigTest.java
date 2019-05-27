@@ -10,11 +10,11 @@ import junit.framework.TestCase;
 
 import java.util.List;
 
-/*
-    https://github.com/pivotal-legacy/git_scripts
-    Supports a `git pair-commit` style that differs from the other style.
-    Each pair does not have an email address inline, but has a record in email_addresses.
-    https://github.com/RoboPlugins/git-pair.idea/issues/12
+/**
+ * https://github.com/pivotal-legacy/git_scripts
+ * Supports a `git pair-commit` style that differs from the other style.
+ * Each pair does not have an email address inline, but has a record in email_addresses.
+ * https://github.com/RoboPlugins/git-pair.idea/issues/12
  */
 public class PairCommitStyleConfigTest extends TestCase {
     private static final String COMMIT_STYLE_YAML = "# This is a comment.\n" +
@@ -46,9 +46,9 @@ public class PairCommitStyleConfigTest extends TestCase {
         assertEquals("gc", teamMembers.get(0).getInitials());
 
         // AND it should have Robert Wallis
-        assertEquals("Robert A. Wallis", teamMembers.get(2).getName());
-        assertEquals("smilingrob@gmail.com", teamMembers.get(2).getEmail());
-        assertEquals("rw", teamMembers.get(2).getInitials());
+        assertEquals("Robert A. Wallis", teamMembers.get(1).getName());
+        assertEquals("smilingrob@gmail.com", teamMembers.get(1).getEmail());
+        assertEquals("rw", teamMembers.get(1).getInitials());
     }
 
     public void testUpdateTeamMemberEmail() {
@@ -61,38 +61,38 @@ public class PairCommitStyleConfigTest extends TestCase {
         Node emailAddressesNode = config.get("email_addresses");
 
         // WHEN the team member is updated
-        TeamMember updated = PairConfig.updateTeamMemberEmail(teamMember, emailAddressesNode);
+        PairConfig.updateTeamMemberEmail(teamMember, emailAddressesNode);
 
         // THEN it should contain the correct fields
-        assertNotNull(updated);
-        assertEquals("rw", updated.getInitials());
-        assertEquals("Robert A. Wallis", updated.getName());
-        assertEquals("smilingrob@gmail.com", updated.getEmail());
+        assertNotNull(teamMember);
+        assertEquals("rw", teamMember.getInitials());
+        assertEquals("Robert A. Wallis", teamMember.getName());
+        assertEquals("smilingrob@gmail.com", teamMember.getEmail());
 
         // WHEN a bad node is parsed
         // THEN it should not crash
-        assertNull(PairConfig.updateTeamMemberEmail(null, null));
+        PairConfig.updateTeamMemberEmail(null, null);
 
         Node bad1 = new Node(null);
-        assertNull(PairConfig.updateTeamMemberEmail(teamMember, bad1));
+        PairConfig.updateTeamMemberEmail(teamMember, bad1);
 
         bad1.setKey("gc");
-        assertNull(PairConfig.updateTeamMemberEmail(teamMember, bad1));
+        PairConfig.updateTeamMemberEmail(teamMember, bad1);
 
         // WHEN it's not a full address
         // THEN don't crash
         bad1.setValue("@");
-        assertNull(PairConfig.updateTeamMemberEmail(teamMember, bad1));
+        PairConfig.updateTeamMemberEmail(teamMember, bad1);
 
         // WHEN it's not a full address
         // THEN don't crash
         bad1.setValue(".");
-        assertNull(PairConfig.updateTeamMemberEmail(teamMember, bad1));
+        PairConfig.updateTeamMemberEmail(teamMember, bad1);
 
         // WHEN it's empty
         // THEN don't crash
         bad1.setValue("");
-        assertNull(PairConfig.updateTeamMemberEmail(teamMember, bad1));
+        PairConfig.updateTeamMemberEmail(teamMember, bad1);
     }
 
     public void testGetTeamMemberByInitials() {

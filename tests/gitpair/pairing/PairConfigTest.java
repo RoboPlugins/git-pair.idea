@@ -15,7 +15,7 @@ import java.util.List;
  */
 public class PairConfigTest extends TestCase {
 
-    public static final String YAML_SOURCE = "# This is a comment.\n" +
+    static final String YAML_SOURCE = "# This is a comment.\n" +
             "\n" +
             "pairs:\n" +
             "  gc: Grumpy Cat;grumpy.cat\n" +
@@ -86,7 +86,8 @@ public class PairConfigTest extends TestCase {
         // WHEN it's missing an email
         // THEN don't crash
         bad1.setValue("name;");
-        assertNull(PairConfig.teamMemberFromYamlPairChildNode(bad1));
+        TeamMember person = PairConfig.teamMemberFromYamlPairChildNode(bad1);
+        assertNotNull(person.getName());
     }
 
     public void testGetTeamMemberByInitials() {
