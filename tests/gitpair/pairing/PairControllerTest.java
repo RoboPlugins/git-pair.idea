@@ -223,7 +223,7 @@ public class PairControllerTest extends TestCase {
 
         {
             // WHEN we use emails with different domains
-            List<TeamMember> team = pairController.matchTeamMembersFromEmail("grumpy.cat+robert.wallis@example.com");
+            List<TeamMember> team = pairController.matchTeamMembersFromEmail("grumpy.cat+smilingrob@example.com");
 
             // THEN the list should match the members
             assertNotNull(team);
@@ -241,10 +241,10 @@ public class PairControllerTest extends TestCase {
             // THEN the list should match the members
             assertNotNull(team);
             assertEquals(2, team.size());
-            assertEquals("Grumpy Cat", team.get(0).getName());
-            assertEquals("Robert A. Wallis", team.get(1).getName());
-            assertEquals("grumpy.cat@example.com", team.get(0).getEmail());
-            assertEquals("smilingrob@gmail.com", team.get(1).getEmail());
+            assertEquals("Robert A. Wallis", team.get(0).getName());
+            assertEquals("Grumpy Cat", team.get(1).getName());
+            assertEquals("smilingrob@gmail.com", team.get(0).getEmail());
+            assertEquals("grumpy.cat@example.com", team.get(1).getEmail());
         }
     }
 

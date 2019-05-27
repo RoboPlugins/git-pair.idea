@@ -135,8 +135,19 @@ public class PairController {
 
         for (String alias : aliases) {
             for (TeamMember teamMember : pairConfig.getTeamMembers()) {
-                if (alias.equals(teamMember.getEmail())) {
+                String personEmail = teamMember.getEmail();
+                if (alias.equals(personEmail)) {
                     matchingTeam.add(teamMember);
+                    continue;
+                }
+                if (StringUtil.isNotEmpty(personEmail)) {
+                    String[] personEmailSplit = personEmail.split("@");
+                    if (personEmailSplit.length < 1) {
+                        continue;
+                    }
+                    if (alias.equals(personEmailSplit[0])) {
+                        matchingTeam.add(teamMember);
+                    }
                 }
             }
         }
