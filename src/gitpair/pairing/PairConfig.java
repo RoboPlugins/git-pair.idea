@@ -81,6 +81,12 @@ public class PairConfig {
         return new TeamMember(initials, name, email);
     }
 
+    static TeamMember updateTeamMemberEmail(TeamMember person, Node email_addresses)
+    {
+        //return person;
+        return null;
+    }
+
     /**
      * Configure with a YAML source text.
      *
