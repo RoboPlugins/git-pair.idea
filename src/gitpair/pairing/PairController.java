@@ -70,6 +70,9 @@ public class PairController {
         if (email != null) {
             gitRunner.setUserEmail(email, pairConfig.shouldChangeGlobalUser());
         }
+        if (name == null && email == null) {
+            gitRunner.unsetUserAndEmail(pairConfig.shouldChangeGlobalUser());
+        }
     }
 
     /**
