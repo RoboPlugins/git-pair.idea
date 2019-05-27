@@ -4,7 +4,7 @@
 <idea-plugin>
     <id>com.smilingrob.gitpair</id>
     <name>Git Pair</name>
-    <version>1.4</version>
+    <version>1.5</version>
     <vendor email="smilingrob@gmail.com" url="http://smilingrob.com">Robert Wallis</vendor>
 
     <description><![CDATA[
@@ -25,10 +25,9 @@
 
     <change-notes><![CDATA[
     <ul>
+      <li>v1.5 - Support for different domains with email_addresses root section.
       <li>v1.4 - Checking <code>$PROJECT/.pairs</code> and then <code>$HOME/.pairs</code>, <code>$HOME</code> is new.
       <li>v1.3 - Respect's <code>global</code> setting, if <code>true</code> then the git name/email for the logged in user will be set (global).</li>
-      <li>v1.2 - Fixing missing Files and Path class in JRE 1.6.</li>
-      <li>v1.1 - Going back down to JRE 1.6 instead of 1.7 because my pairing station at work doesn't have a reasonable JRE on it.</li>
     </ul>
     ]]>
     </change-notes>
