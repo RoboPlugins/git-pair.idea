@@ -142,7 +142,7 @@ public class PairControllerTest extends TestCase {
         // GIVEN a configuration
         PairController pairController = new PairController(pairCommitConfig, gitRunner);
 
-        // AND some members
+        // AND some members with different domains
         ArrayList<TeamMember> list = new ArrayList<TeamMember>();
         list.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat@example.com"));
         list.add(new TeamMember("rw", "Robert A. Wallis", "smilingrob@gmail.com"));
@@ -153,7 +153,7 @@ public class PairControllerTest extends TestCase {
         // THEN it should be formatted correctly
         assertEquals("grumpy.cat+smilingrob@example.com", pairName);
 
-        // GIVEN a reversed list
+        // GIVEN a reversed list of members with different domains
         ArrayList<TeamMember> reversedList = new ArrayList<TeamMember>();
         reversedList.add(new TeamMember("rw", "Robert A. Wallis", "smilingrob@gmail.com"));
         reversedList.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat@example.com"));
