@@ -17,6 +17,7 @@ import java.util.List;
 public class PairControllerTest extends TestCase {
 
     private PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
+    private PairConfig pairCommitConfig = new PairConfig(PairCommitStyleConfigTest.COMMIT_STYLE_YAML);
     private GitRunner gitRunner = new GitRunner(".");
     private GitConfigSettings gitConfigSettings = new GitConfigSettings();
 
@@ -214,6 +215,37 @@ public class PairControllerTest extends TestCase {
         assertEquals(2, team.size());
         assertEquals("Grumpy Cat", team.get(0).getName());
         assertEquals("Robert A. Wallis", team.get(1).getName());
+    }
+
+    public void testPairMatcherDifferentDomains() {
+        // GIVEN a valid configuration using `git pair-commit` style config
+        PairController pairController = new PairController(pairCommitConfig, gitRunner);
+
+        {
+            // WHEN we use emails with different domains
+            List<TeamMember> team = pairController.matchTeamMembersFromEmail("grumpy.cat+robert.wallis@example.com");
+
+            // THEN the list should match the members
+            assertNotNull(team);
+            assertEquals(2, team.size());
+            assertEquals("Grumpy Cat", team.get(0).getName());
+            assertEquals("Robert A. Wallis", team.get(1).getName());
+            assertEquals("grumpy.cat@example.com", team.get(0).getEmail());
+            assertEquals("smilingrob@gmail.com", team.get(1).getEmail());
+        }
+
+        {
+            // WHEN we use emails in opposite order
+            List<TeamMember> team = pairController.matchTeamMembersFromEmail("smilingrob+grumpy.cat@gmail.com");
+
+            // THEN the list should match the members
+            assertNotNull(team);
+            assertEquals(2, team.size());
+            assertEquals("Grumpy Cat", team.get(0).getName());
+            assertEquals("Robert A. Wallis", team.get(1).getName());
+            assertEquals("grumpy.cat@example.com", team.get(0).getEmail());
+            assertEquals("smilingrob@gmail.com", team.get(1).getEmail());
+        }
     }
 
     public void testPairMatcherBadData() {

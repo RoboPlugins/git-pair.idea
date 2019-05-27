@@ -17,7 +17,7 @@ import java.util.List;
  * https://github.com/RoboPlugins/git-pair.idea/issues/12
  */
 public class PairCommitStyleConfigTest extends TestCase {
-    private static final String COMMIT_STYLE_YAML = "# This is a comment.\n" +
+    static final String COMMIT_STYLE_YAML = "# This is a comment.\n" +
             "\n" +
             "pairs:\n" +
             "  gc: Grumpy Cat\n" +
