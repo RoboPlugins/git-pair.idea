@@ -138,6 +138,33 @@ public class PairControllerTest extends TestCase {
         assertEquals("prefix+grumpy.cat+robert.wallis@example.com", pairNameReversed);
     }
 
+    public void testGeneratePairEmailDifferentDomains() {
+        // GIVEN a configuration
+        PairController pairController = new PairController(pairCommitConfig, gitRunner);
+
+        // AND some members
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
+        list.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat@example.com"));
+        list.add(new TeamMember("rw", "Robert A. Wallis", "smilingrob@gmail.com"));
+
+        // WHEN a pair email is generated
+        String pairName = pairController.generatePairEmail(list);
+
+        // THEN it should be formatted correctly
+        assertEquals("grumpy.cat+smilingrob@example.com", pairName);
+
+        // GIVEN a reversed list
+        ArrayList<TeamMember> reversedList = new ArrayList<TeamMember>();
+        reversedList.add(new TeamMember("rw", "Robert A. Wallis", "smilingrob@gmail.com"));
+        reversedList.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat@example.com"));
+
+        // WHEN a pair name is generated in reverse order
+        String pairNameReversed = pairController.generatePairEmail(reversedList);
+
+        // THEN it should STILL be formatted alphabetically
+        assertEquals("grumpy.cat+smilingrob@example.com", pairNameReversed);
+    }
+
     public void testGeneratePairEmailSolo() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
