@@ -70,6 +70,9 @@ public class PairController {
         if (email != null) {
             gitRunner.setUserEmail(email, pairConfig.shouldChangeGlobalUser());
         }
+        if (name == null && email == null) {
+            gitRunner.unsetUserAndEmail(pairConfig.shouldChangeGlobalUser());
+        }
     }
 
     /**
@@ -135,8 +138,19 @@ public class PairController {
 
         for (String alias : aliases) {
             for (TeamMember teamMember : pairConfig.getTeamMembers()) {
-                if (alias.equals(teamMember.getEmail())) {
+                String personEmail = teamMember.getEmail();
+                if (alias.equals(personEmail)) {
                     matchingTeam.add(teamMember);
+                    continue;
+                }
+                if (StringUtil.isNotEmpty(personEmail)) {
+                    String[] personEmailSplit = personEmail.split("@");
+                    if (personEmailSplit.length < 1) {
+                        continue;
+                    }
+                    if (alias.equals(personEmailSplit[0])) {
+                        matchingTeam.add(teamMember);
+                    }
                 }
             }
         }
@@ -159,7 +173,7 @@ public class PairController {
 
         ArrayList<TeamMember> teamArray = new ArrayList<TeamMember>();
         for (TeamMember t : teamMembers) {
-            if (t != null && t.getEmail() != null) {
+            if (t != null && usernameFromEmail(t.getEmail()) != null) {
                 teamArray.add(t);
             }
         }
@@ -172,17 +186,27 @@ public class PairController {
             sb.append("+");
         }
 
-        int size = teamArray.size();
-        for (int i = 0; i < size; i++) {
+        int teamSize = teamArray.size();
+        for (int i = 0; i < teamSize; i++) {
             if (i > 0) {
                 sb.append("+");
             }
-            sb.append(teamArray.get(i).getEmail());
+            sb.append(usernameFromEmail(teamArray.get(i).getEmail()));
         }
 
         if (StringUtil.isNotEmpty(pairConfig.getDomain())) {
             sb.append("@");
             sb.append(pairConfig.getDomain());
+        } else {
+            for (TeamMember teamMember : teamArray) {
+                // get the first available domain
+                String domain = domainFromEmail(teamMember.getEmail());
+                if (StringUtil.isNotEmpty(domain)) {
+                    sb.append("@");
+                    sb.append(domain);
+                    break;
+                }
+            }
         }
 
         return sb.toString();
@@ -240,6 +264,24 @@ public class PairController {
             }
             return o1.getName().compareTo(o2.getName());
         }
+    }
+
+    private static String usernameFromEmail(String email) {
+        if (email == null)
+            return null;
+        String[] split = email.split("@");
+        if (split.length == 0)
+            return null;
+        return split[0];
+    }
+
+    private static String domainFromEmail(String email) {
+        if (email == null)
+            return null;
+        String[] split = email.split("@");
+        if (split.length < 2)
+            return null;
+        return split[1];
     }
 
 }

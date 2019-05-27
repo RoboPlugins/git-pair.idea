@@ -84,14 +84,29 @@ public class GitRunner {
      * Run `git config user.name Bub` and return the current configured user.
      *
      * @param fullName the current name of the user, for example "Bub".
+     * @param global true for user setting, false for project setting
      */
     public void setUserName(@NotNull String fullName, boolean global) {
         if (global) {
             runGitCommand("config", "--global", "user.name", fullName);
             // clear the local config, so it won't override our new setting
-            runGitCommand("config", "--unset", "--local", "user.name");
+            runGitCommand("config", "--local", "--unset", "user.name");
         } else {
             runGitCommand("config", "user.name", fullName);
+        }
+    }
+
+    /**
+     * Sets the configured user to nothing.
+     * @param global true for user setting, false for project setting
+     */
+    public void unsetUserAndEmail(boolean global) {
+        if (global) {
+            runGitCommand("config", "--global", "--unset", "user.name");
+            runGitCommand("config", "--global", "--unset", "user.email");
+        } else {
+            runGitCommand("config", "--local", "--unset", "user.name");
+            runGitCommand("config", "--local", "--unset", "user.email");
         }
     }
 
@@ -199,4 +214,5 @@ public class GitRunner {
 
         return output;
     }
+
 }

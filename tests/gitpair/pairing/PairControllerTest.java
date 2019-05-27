@@ -17,6 +17,7 @@ import java.util.List;
 public class PairControllerTest extends TestCase {
 
     private PairConfig pairConfig = new PairConfig(PairConfigTest.YAML_SOURCE);
+    private PairConfig pairCommitConfig = new PairConfig(PairCommitStyleConfigTest.COMMIT_STYLE_YAML);
     private GitRunner gitRunner = new GitRunner(".");
     private GitConfigSettings gitConfigSettings = new GitConfigSettings();
 
@@ -137,6 +138,33 @@ public class PairControllerTest extends TestCase {
         assertEquals("prefix+grumpy.cat+robert.wallis@example.com", pairNameReversed);
     }
 
+    public void testGeneratePairEmailDifferentDomains() {
+        // GIVEN a configuration
+        PairController pairController = new PairController(pairCommitConfig, gitRunner);
+
+        // AND some members with different domains
+        ArrayList<TeamMember> list = new ArrayList<TeamMember>();
+        list.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat@example.com"));
+        list.add(new TeamMember("rw", "Robert A. Wallis", "smilingrob@gmail.com"));
+
+        // WHEN a pair email is generated
+        String pairName = pairController.generatePairEmail(list);
+
+        // THEN it should be formatted correctly
+        assertEquals("grumpy.cat+smilingrob@example.com", pairName);
+
+        // GIVEN a reversed list of members with different domains
+        ArrayList<TeamMember> reversedList = new ArrayList<TeamMember>();
+        reversedList.add(new TeamMember("rw", "Robert A. Wallis", "smilingrob@gmail.com"));
+        reversedList.add(new TeamMember("gc", "Grumpy Cat", "grumpy.cat@example.com"));
+
+        // WHEN a pair name is generated in reverse order
+        String pairNameReversed = pairController.generatePairEmail(reversedList);
+
+        // THEN it should STILL be formatted alphabetically
+        assertEquals("grumpy.cat+smilingrob@example.com", pairNameReversed);
+    }
+
     public void testGeneratePairEmailSolo() {
         // GIVEN a configuration
         PairController pairController = new PairController(pairConfig, gitRunner);
@@ -216,6 +244,37 @@ public class PairControllerTest extends TestCase {
         assertEquals("Robert A. Wallis", team.get(1).getName());
     }
 
+    public void testPairMatcherDifferentDomains() {
+        // GIVEN a valid configuration using `git pair-commit` style config
+        PairController pairController = new PairController(pairCommitConfig, gitRunner);
+
+        {
+            // WHEN we use emails with different domains
+            List<TeamMember> team = pairController.matchTeamMembersFromEmail("grumpy.cat+smilingrob@example.com");
+
+            // THEN the list should match the members
+            assertNotNull(team);
+            assertEquals(2, team.size());
+            assertEquals("Grumpy Cat", team.get(0).getName());
+            assertEquals("Robert A. Wallis", team.get(1).getName());
+            assertEquals("grumpy.cat@example.com", team.get(0).getEmail());
+            assertEquals("smilingrob@gmail.com", team.get(1).getEmail());
+        }
+
+        {
+            // WHEN we use emails in opposite order
+            List<TeamMember> team = pairController.matchTeamMembersFromEmail("smilingrob+grumpy.cat@gmail.com");
+
+            // THEN the list should match the members
+            assertNotNull(team);
+            assertEquals(2, team.size());
+            assertEquals("Robert A. Wallis", team.get(0).getName());
+            assertEquals("Grumpy Cat", team.get(1).getName());
+            assertEquals("smilingrob@gmail.com", team.get(0).getEmail());
+            assertEquals("grumpy.cat@example.com", team.get(1).getEmail());
+        }
+    }
+
     public void testPairMatcherBadData() {
         // GIVEN a valid configuration and a configured email
         PairController pairController = new PairController(pairConfig, gitRunner);
@@ -252,6 +311,22 @@ public class PairControllerTest extends TestCase {
 
         // THEN the team member should be toggled off
         assertEquals("Robert A. Wallis", pairController.getPairDisplayName());
+    }
+
+    public void testToggleOffAllMembers() {
+        // GIVEN a valid configuration and a configured email
+        PairController pairController = new PairController(pairConfig, gitRunner);
+        gitRunner.setUserEmail("test@example.com", true);
+        gitRunner.setUserEmail("grumpy.cat+robert.wallis", false);
+        pairController.init();
+
+        // WHEN all the team is toggled off
+        pairController.toggleTeamMember(pairConfig.getTeamMemberByInitials("gc"));
+        pairController.toggleTeamMember(pairConfig.getTeamMemberByInitials("rw"));
+
+        // THEN the team member should be toggled off
+        assertEquals("git pair", pairController.getPairDisplayName());
+        assertEquals("test@example.com", gitRunner.getUserEmail());
     }
 
     public void testToggleTeamMemberOn() {

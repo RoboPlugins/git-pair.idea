@@ -29,6 +29,28 @@ email:
 global: true
 ```
 
+## Multiple Domains
+
+Maybe you have contractors that have different domains, or maybe you pair with personal email addresses.
+How can you configure your `.pairs` file to support multiple domains?
+
+```
+# This is for the awesome git pair https://plugins.jetbrains.com/plugin/8135 plugin.
+# But it works with the Pivotal Labs `git pair` plugin too.
+
+pairs:
+  gc: Grumpy Cat
+  rw: Robert Wallis
+
+email_addresses:
+  gc: grumpy.cat@example.com
+  rw: smilingrob@gmail.com
+```
+
+The domain chosen is in alphabetical order based on name.
+So in the example above, `example.com` will always be chosen if Grumpy Cat pairs with
+Robert because "G" comes before "R".  And the commit email will be `grumpy.cat+smilingrob@example.com`. 
+
 # FAQ
 
 ### Why not just use the command line?
