@@ -4,12 +4,12 @@
 
 package gitpair.git;
 
-import com.intellij.testFramework.fixtures.LightPlatformCodeInsightFixtureTestCase;
+import junit.framework.TestCase;
 
 /**
  * Make sure the git commands work.
  */
-public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
+public class GitRunnerTest extends TestCase {
 
     private GitConfigSettings gitConfigSettings = new GitConfigSettings();
 
@@ -27,7 +27,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGetUserEmail() {
         // GIVEN a system with git installed and a project configured with git
-        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        GitRunner gitRunner = new GitRunner(".");
         gitRunner.runGitCommand("init");
         gitRunner.runGitCommand("config", "user.email", "setup@example.com");
 
@@ -40,7 +40,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testSetUserEmail() {
         // GIVEN a system with git installed and a project configured with git
-        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        GitRunner gitRunner = new GitRunner(".");
         gitRunner.runGitCommand("init");
         gitRunner.runGitCommand("config", "user.email", "setup@example.com");
 
@@ -53,7 +53,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testSetUserEmailGlobal() {
         // GIVEN a system with git installed and a project configured with git
-        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        GitRunner gitRunner = new GitRunner(".");
         gitRunner.runGitCommand("init");
         gitRunner.runGitCommand("config", "user.email", "setup@example.com");
 
@@ -66,7 +66,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testGetUserName() {
         // GIVEN a system with git installed and a project configured with git
-        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        GitRunner gitRunner = new GitRunner(".");
         gitRunner.runGitCommand("init");
         gitRunner.runGitCommand("config", "user.name", "TestUserName");
 
@@ -79,7 +79,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testSetUserName() {
         // GIVEN a system with git installed and a project configured with git
-        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        GitRunner gitRunner = new GitRunner(".");
         gitRunner.runGitCommand("init");
         gitRunner.runGitCommand("config", "user.name", "setup");
 
@@ -92,7 +92,7 @@ public class GitRunnerTest extends LightPlatformCodeInsightFixtureTestCase {
 
     public void testSetUserNameGlobal() {
         // GIVEN a system with git installed and a project configured with git
-        GitRunner gitRunner = new GitRunner(getProject().getBasePath());
+        GitRunner gitRunner = new GitRunner(".");
         gitRunner.runGitCommand("init");
         gitRunner.runGitCommand("config", "user.name", "setup");
 
