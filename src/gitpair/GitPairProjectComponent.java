@@ -26,14 +26,6 @@ public class GitPairProjectComponent implements ProjectComponent {
     }
 
     @Override
-    public void initComponent() {
-    }
-
-    @Override
-    public void disposeComponent() {
-    }
-
-    @Override
     @NotNull
     public String getComponentName() {
         return "gitpair.GitPairProjectComponent";
