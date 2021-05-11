@@ -1,3 +1,17 @@
+# Archived
+JetBrains has made it difficult to create a plugin that works this way.
+First "actions" are meant to be statically registered, it's possible to create dynamic actions, but it's poorly documented:
+https://plugins.jetbrains.com/docs/intellij/grouping-action.html#adding-child-actions-to-the-dynamic-group
+Actions would be an item to click on in a dialog, like a pairing partner.
+
+Second, after I go through the work of making actions dynamic, I still won't have a popup, or be able to dock the popup into the bottom corner because they removed the old APIs that I was using.  And finally, after years of getting deprication warnings users are experiencing flat out crashing from removed apis: #17.
+
+I think it will be about a week of work to fix these issues, I tried a few nights.  But I don't have the motivation to work on it because I have many other better projects to work on.
+
+Let me know if you want to be the maintainer or to remove the git-pair plugin from the marketplace.  I've already marked the highest version as 203.
+
+-- Robert (May 10th 2021)
+
 # Git Pair
 
 Pair programming plugin for the Idea platform ([IntelliJ](https://www.jetbrains.com/idea/), [AppCode](https://www.jetbrains.com/objc/), [Android Studio](http://developer.android.com/tools/studio/index.html)).
